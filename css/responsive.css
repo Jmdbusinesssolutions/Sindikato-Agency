@@ -102,6 +102,10 @@
     grid-template-columns: 1fr;
   }
   
+  .portals-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .contact-layout-grid {
     grid-template-columns: 1fr;
   }

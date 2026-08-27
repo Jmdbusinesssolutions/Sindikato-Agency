@@ -824,5 +824,494 @@ function initHostRecruitment() {
       showToast('Recruiter application transferred to contact form!');
     });
   }
+
+  // =========================================================================
+  // BOX 1: HOST PORTAL MODAL & DETAILS MANAGEMENT
+  // =========================================================================
+  const openHostCard = document.getElementById('openHostPortalCard');
+  if (openHostCard) {
+    openHostCard.addEventListener('click', () => {
+      renderHostPortalModal();
+    });
+  }
+
+  // =========================================================================
+  // BOX 2: RECRUITER PORTAL MODAL & HOST SUBMISSION
+  // =========================================================================
+  const openRecruiterCard = document.getElementById('openRecruiterPortalCard');
+  if (openRecruiterCard) {
+    openRecruiterCard.addEventListener('click', () => {
+      renderRecruiterPortalModal();
+    });
+  }
+}
+
+// --------------------------------------------------------------------------
+// RENDER HOST PORTAL MODAL
+// --------------------------------------------------------------------------
+function renderHostPortalModal(activeTab = 'form') {
+  const modalBackdrop = document.getElementById('caseStudyModal');
+  const modalBody = document.getElementById('modalContentBody');
+  if (!modalBackdrop || !modalBody) return;
+
+  const savedHost = JSON.parse(localStorage.getItem('sindikato_host_profile') || 'null');
+
+  modalBody.innerHTML = `
+    <div style="margin-bottom: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <span class="badge" style="margin-bottom: 0;">👑 OFFICIAL HOST PORTAL</span>
+        <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">SINDIKATO STREAMER VAULT</span>
+      </div>
+      <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Host Details & Live Streamer Portal</h2>
+      <p style="color: var(--text-secondary); font-size: 0.92rem;">I-save ang iyong live stream profile details, schedule, at subaybayan ang iyong diamond targets & agency payout account.</p>
+    </div>
+
+    <!-- Portal Navigation Tabs -->
+    <div class="portal-tabs-nav">
+      <button class="portal-tab-button ${activeTab === 'form' ? 'active' : ''}" onclick="renderHostPortalModal('form')">1. Host Profile & Details Form</button>
+      <button class="portal-tab-button ${activeTab === 'dashboard' ? 'active' : ''}" onclick="renderHostPortalModal('dashboard')">2. My Host Status Card</button>
+      <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">3. Streaming Guidelines & Milestones</button>
+    </div>
+
+    <!-- Tab 1: Registration Form -->
+    <div id="hostTabForm" style="display: ${activeTab === 'form' ? 'block' : 'none'};">
+      <form id="hostDetailsForm">
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Host Real Full Name *</label>
+            <input type="text" id="hostRealName" class="form-control" placeholder="e.g. Maria Santos" required value="${savedHost ? savedHost.realName : ''}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Live Streamer / Stage Name *</label>
+            <input type="text" id="hostStageName" class="form-control" placeholder="e.g. QueenMia_Live" required value="${savedHost ? savedHost.stageName : ''}">
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Primary Live App *</label>
+            <select id="hostApp" class="form-control" style="background: rgba(14,17,26,0.9);">
+              <option value="TikTok LIVE" ${savedHost && savedHost.app === 'TikTok LIVE' ? 'selected' : ''}>TikTok LIVE</option>
+              <option value="Bigo Live" ${savedHost && savedHost.app === 'Bigo Live' ? 'selected' : ''}>Bigo Live</option>
+              <option value="Poppo Live" ${savedHost && savedHost.app === 'Poppo Live' ? 'selected' : ''}>Poppo Live</option>
+              <option value="Likee" ${savedHost && savedHost.app === 'Likee' ? 'selected' : ''}>Likee</option>
+              <option value="Twitch" ${savedHost && savedHost.app === 'Twitch' ? 'selected' : ''}>Twitch</option>
+              <option value="Other App" ${savedHost && savedHost.app === 'Other App' ? 'selected' : ''}>Other App</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Host User ID / Profile Link *</label>
+            <input type="text" id="hostId" class="form-control" placeholder="e.g. @queenmia99 / ID: 9384729" required value="${savedHost ? savedHost.hostId : ''}">
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Monthly Target Diamonds *</label>
+            <select id="hostTargetDiamonds" class="form-control" style="background: rgba(14,17,26,0.9);">
+              <option value="500K" ${savedHost && savedHost.targetDiamonds === '500K' ? 'selected' : ''}>💎 500K Diamonds Milestone</option>
+              <option value="1M" ${savedHost && savedHost.targetDiamonds === '1M' ? 'selected' : ''}>💎 1M Diamonds Milestone</option>
+              <option value="2M" ${savedHost && savedHost.targetDiamonds === '2M' ? 'selected' : ''}>💎 2M Diamonds Milestone</option>
+              <option value="5M" ${savedHost && savedHost.targetDiamonds === '5M' ? 'selected' : ''}>💎 5M Diamonds Milestone</option>
+              <option value="10M" ${savedHost && savedHost.targetDiamonds === '10M' ? 'selected' : ''}>💎 10M Diamonds Milestone</option>
+              <option value="20M+" ${savedHost && savedHost.targetDiamonds === '20M+' ? 'selected' : ''}>💎 20M+ Elite Crown Diamond</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Daily Live Schedule *</label>
+            <input type="text" id="hostSchedule" class="form-control" placeholder="e.g. 7:00 PM – 11:00 PM Daily" required value="${savedHost ? savedHost.schedule : ''}">
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Payout Method (GCash / Maya / Bank) *</label>
+            <input type="text" id="hostPayoutAccount" class="form-control" placeholder="e.g. GCash 0917-123-4567" required value="${savedHost ? savedHost.payoutAccount : ''}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contact Mobile / WhatsApp *</label>
+            <input type="text" id="hostContact" class="form-control" placeholder="e.g. +63 917 123 4567" required value="${savedHost ? savedHost.contact : ''}">
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 14px; margin-top: 10px;">
+          <button type="submit" class="btn btn-primary" style="flex: 1; padding: 16px;">
+            <span>Save & Register Host Details</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tab 2: Host Status Card -->
+    <div id="hostTabDashboard" style="display: ${activeTab === 'dashboard' ? 'block' : 'none'};">
+      ${savedHost ? `
+        <div style="background: rgba(212,175,55,0.08); border: 2px solid var(--accent-gold); border-radius: var(--radius-lg); padding: 32px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); position: relative;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #000;">👑</div>
+              <div>
+                <h3 style="font-size: 1.4rem; font-weight: 800;">${savedHost.stageName}</h3>
+                <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">${savedHost.realName} • ID: ${savedHost.hostId}</div>
+              </div>
+            </div>
+            <span class="badge" style="margin-bottom: 0; background: rgba(39,201,63,0.15); color: #27c93f; border-color: #27c93f;">● ACTIVE SINDIKATO HOST</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
+            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Streaming Platform</div>
+              <div style="font-weight: 800; color: var(--accent-gold-light); font-size: 1.05rem;">${savedHost.app}</div>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Monthly Diamond Target</div>
+              <div style="font-weight: 800; color: var(--accent-gold-bright); font-size: 1.05rem;">💎 ${savedHost.targetDiamonds}</div>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Live Schedule</div>
+              <div style="font-weight: 700; font-size: 0.95rem;">${savedHost.schedule}</div>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Registered Payout Account</div>
+              <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent-gold-light);">${savedHost.payoutAccount}</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(0,0,0,0.4); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 24px;">
+            <div class="flex-between" style="margin-bottom: 8px;">
+              <span style="font-size: 0.85rem; font-weight: 700;">Diamond Milestone Target Progress</span>
+              <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-gold-bright);">Goal: ${savedHost.targetDiamonds}</span>
+            </div>
+            <div style="width: 100%; height: 10px; border-radius: 5px; background: rgba(255,255,255,0.1); overflow: hidden;">
+              <div style="width: 75%; height: 100%; background: var(--gold-gradient); border-radius: 5px;"></div>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+              Host Tier Level: Gold Syndicate Streamer • Target Verified by Agency Manager
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="renderHostPortalModal('form')">Edit Details</button>
+            <button class="btn btn-secondary" onclick="alert('Host Details copied to clipboard!');">Copy Host Card</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
+          </div>
+        </div>
+      ` : `
+        <div style="text-align: center; padding: 40px 20px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-size: 3rem; margin-bottom: 12px;">📝</div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">Wala pang naka-save na Host Details</h3>
+          <p style="color: var(--text-secondary); max-width: 460px; margin: 0 auto 20px auto; font-size: 0.9rem;">
+            Punan ang Form sa Tab 1 para ma-save ang iyong opisyal na streamer profile sa Sindikato Agency vault.
+          </p>
+          <button class="btn btn-primary" onclick="renderHostPortalModal('form')">Pumunta sa Registration Form</button>
+        </div>
+      `}
+    </div>
+
+    <!-- Tab 3: Rules & Milestones -->
+    <div id="hostTabRules" style="display: ${activeTab === 'rules' ? 'block' : 'none'};">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💎 Diamond Payout Schedule</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            Lahat ng official host diamond milestones ay computed monthly. Ang cash payouts at agency rewards ay inire-release tuwing <strong>5th at 20th ng bawat buwan</strong> diretso sa iyong registered GCash/Bank account.
+          </p>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <h4 style="font-weight: 800; margin-bottom: 8px;">🛡️ Agency Streaming Ethics & Guidelines</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-secondary);">
+            <li>✓ Minimum of 2 to 4 streaming hours daily para sa active milestone validity.</li>
+            <li>✓ Sumunod sa community standards ng iyong host platform (TikTok, Bigo, Poppo).</li>
+            <li>✓ <strong>LOYALTY • DISCIPLINE • RESPECT</strong> — Panatilihin ang professional agency representation sa live PK battles at events.</li>
+          </ul>
+        </div>
+
+        <div class="sindikato-motto-ribbon">
+          LOYALTY • DISCIPLINE • RESPECT — WE ARE THE SINDIKATO
+        </div>
+      </div>
+    </div>
+  `;
+
+  modalBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Attach form submit listener
+  const form = document.getElementById('hostDetailsForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const hostData = {
+        realName: document.getElementById('hostRealName').value.trim(),
+        stageName: document.getElementById('hostStageName').value.trim(),
+        app: document.getElementById('hostApp').value,
+        hostId: document.getElementById('hostId').value.trim(),
+        targetDiamonds: document.getElementById('hostTargetDiamonds').value,
+        schedule: document.getElementById('hostSchedule').value.trim(),
+        payoutAccount: document.getElementById('hostPayoutAccount').value.trim(),
+        contact: document.getElementById('hostContact').value.trim(),
+        savedAt: new Date().toLocaleDateString()
+      };
+
+      localStorage.setItem('sindikato_host_profile', JSON.stringify(hostData));
+      showToast(`Host profile ni ${hostData.stageName} ay matagumpay na nai-save!`);
+      renderHostPortalModal('dashboard');
+    });
+  }
+}
+
+// --------------------------------------------------------------------------
+// RENDER RECRUITER PORTAL MODAL
+// --------------------------------------------------------------------------
+function renderRecruiterPortalModal(activeTab = 'submit') {
+  const modalBackdrop = document.getElementById('caseStudyModal');
+  const modalBody = document.getElementById('modalContentBody');
+  if (!modalBackdrop || !modalBody) return;
+
+  const recruitedRoster = JSON.parse(localStorage.getItem('sindikato_recruited_roster') || '[]');
+
+  const diamondCommissionMap = {
+    '500K': 150,
+    '1M': 500,
+    '2M': 700,
+    '3M': 1000,
+    '4M': 1300,
+    '5M': 1500,
+    '6M-10M': 2000,
+    '11M-15M': 2500,
+    '16M-20M': 5000
+  };
+
+  const totalProjected = recruitedRoster.reduce((sum, item) => sum + (diamondCommissionMap[item.diamonds] || 500), 0);
+
+  modalBody.innerHTML = `
+    <div style="margin-bottom: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <span class="badge" style="margin-bottom: 0;">💼 OFFICIAL RECRUITER PORTAL</span>
+        <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">RECRUITMENT VAULT</span>
+      </div>
+      <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Recruiter Submission & Talent Hub</h2>
+      <p style="color: var(--text-secondary); font-size: 0.92rem;">I-submit ang mga bagong na-recruit mong streamers at subaybayan ang iyong direct commission rewards.</p>
+    </div>
+
+    <!-- Portal Navigation Tabs -->
+    <div class="portal-tabs-nav">
+      <button class="portal-tab-button ${activeTab === 'submit' ? 'active' : ''}" onclick="renderRecruiterPortalModal('submit')">1. Submit Recruited Host</button>
+      <button class="portal-tab-button ${activeTab === 'roster' ? 'active' : ''}" onclick="renderRecruiterPortalModal('roster')">2. Recruiter Talent Roster (${recruitedRoster.length})</button>
+      <button class="portal-tab-button ${activeTab === 'schedule' ? 'active' : ''}" onclick="renderRecruiterPortalModal('schedule')">3. Commission Schedule</button>
+    </div>
+
+    <!-- Tab 1: Submit Recruited Host -->
+    <div id="recruiterTabSubmit" style="display: ${activeTab === 'submit' ? 'block' : 'none'};">
+      <form id="submitRecruitedHostForm">
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Recruiter Name / Recruiter ID *</label>
+            <input type="text" id="recruiterIdInput" class="form-control" placeholder="e.g. Agent Marco / REC-104" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Recruiter GCash / Payout Account *</label>
+            <input type="text" id="recruiterPayoutInput" class="form-control" placeholder="e.g. GCash 0918-987-6543" required>
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Recruited Host Real Name *</label>
+            <input type="text" id="recruitedHostName" class="form-control" placeholder="e.g. Angelica Reyes" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Recruited Host Live Streamer Name *</label>
+            <input type="text" id="recruitedHostStageName" class="form-control" placeholder="e.g. Angel_VibesLive" required>
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Streaming Platform *</label>
+            <select id="recruitedHostApp" class="form-control" style="background: rgba(14,17,26,0.9);">
+              <option value="TikTok LIVE">TikTok LIVE</option>
+              <option value="Bigo Live">Bigo Live</option>
+              <option value="Poppo Live">Poppo Live</option>
+              <option value="Likee">Likee</option>
+              <option value="Twitch">Twitch</option>
+              <option value="Other App">Other App</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Host App ID / Profile Link *</label>
+            <input type="text" id="recruitedHostId" class="form-control" placeholder="e.g. @angelvibes / ID: 884729" required>
+          </div>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label class="form-label">Expected Monthly Diamonds Target *</label>
+            <select id="recruitedHostDiamonds" class="form-control" style="background: rgba(14,17,26,0.9);">
+              <option value="500K">💎 500K Diamonds (₱150 Commission)</option>
+              <option value="1M">💎 1M Diamonds (₱500 Commission)</option>
+              <option value="2M">💎 2M Diamonds (₱700 Commission)</option>
+              <option value="3M">💎 3M Diamonds (₱1,000 Commission)</option>
+              <option value="4M">💎 4M Diamonds (₱1,300 Commission)</option>
+              <option value="5M" selected>💎 5M Diamonds (₱1,500 Commission)</option>
+              <option value="6M-10M">💎 6M–10M Diamonds (₱2,000 Commission)</option>
+              <option value="11M-15M">💎 11M–15M Diamonds (₱2,500 Commission)</option>
+              <option value="16M-20M">💎 16M–20M Diamonds (₱5,000 Commission)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Host Contact / Social Media Link</label>
+            <input type="text" id="recruitedHostContact" class="form-control" placeholder="e.g. fb.com/angel.reyes / 0917-000-0000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Recruitment Notes / Special Requests</label>
+          <textarea id="recruitedHostNotes" class="form-control" style="min-height: 80px;" placeholder="Optional notes for agency managers..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 14px; margin-top: 10px;">
+          <button type="submit" class="btn btn-primary" style="flex: 1; padding: 16px;">
+            <span>Submit Recruited Host to Vault</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tab 2: Recruiter Roster Table -->
+    <div id="recruiterTabRoster" style="display: ${activeTab === 'roster' ? 'block' : 'none'};">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; background: rgba(212,175,55,0.08); padding: 16px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+        <div>
+          <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Total Active Recruits</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-gold-bright);">${recruitedRoster.length} Hosts</div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Total Projected Commission</div>
+          <div style="font-size: 1.6rem; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">₱${totalProjected.toLocaleString()}</div>
+        </div>
+      </div>
+
+      ${recruitedRoster.length > 0 ? `
+        <div style="overflow-x: auto; margin-bottom: 24px;">
+          <table class="portal-records-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Recruited Host</th>
+                <th>App & ID</th>
+                <th>Diamond Goal</th>
+                <th>Commission</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${recruitedRoster.map((item, idx) => `
+                <tr>
+                  <td style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted);">${item.date}</td>
+                  <td><strong>${item.stageName}</strong><br><span style="font-size: 0.75rem; color: var(--text-muted);">${item.realName}</span></td>
+                  <td><span class="badge" style="margin-bottom: 0; padding: 2px 8px; font-size: 0.7rem;">${item.app}</span><br><span style="font-family: var(--font-mono); font-size: 0.75rem;">${item.hostId}</span></td>
+                  <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold-bright);">💎 ${item.diamonds}</td>
+                  <td style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-gold-light);">₱${(diamondCommissionMap[item.diamonds] || 500).toLocaleString()}</td>
+                  <td><span style="font-size: 0.75rem; color: #27c93f; background: rgba(39,201,63,0.1); padding: 4px 10px; border-radius: var(--radius-full); border: 1px solid rgba(39,201,63,0.3);">● Verified</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="renderRecruiterPortalModal('submit')">+ Add Another Host</button>
+          <button class="btn btn-secondary" onclick="alert('Recruiter Talent Roster copied!');">Copy Roster</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
+        </div>
+      ` : `
+        <div style="text-align: center; padding: 40px 20px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-size: 3rem; margin-bottom: 12px;">💼</div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">Wala pang na-submit na Recruited Host</h3>
+          <p style="color: var(--text-secondary); max-width: 460px; margin: 0 auto 20px auto; font-size: 0.9rem;">
+            Gamitin ang Tab 1 para i-submit ang mga bagong hosts na iyong na-recruit para mai-record sa commission payout vault.
+          </p>
+          <button class="btn btn-primary" onclick="renderRecruiterPortalModal('submit')">I-submit ang Unang Host</button>
+        </div>
+      `}
+    </div>
+
+    <!-- Tab 3: Commission Schedule -->
+    <div id="recruiterTabSchedule" style="display: ${activeTab === 'schedule' ? 'block' : 'none'};">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💰 Recruiter Cash Commission Mechanics</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            Bilang recruiter, awtomatiko kang kikita ng direct cash commission sa bawat na-recruit mong host sa tuwing makakamit nila ang kanilang diamond targets bawat buwan.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem;">💎 500K</div>
+            <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-gold-bright);">₱150</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem;">💎 1M</div>
+            <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-gold-bright);">₱500</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem;">💎 2M</div>
+            <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-gold-bright);">₱700</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem;">💎 3M</div>
+            <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-gold-bright);">₱1,000</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem;">💎 5M</div>
+            <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-gold-bright);">₱1,500</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem;">💎 16M–20M</div>
+            <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-gold-bright);">₱5,000</div>
+          </div>
+        </div>
+
+        <div class="sindikato-motto-ribbon">
+          LOYALTY • DISCIPLINE • RESPECT — WE ARE THE SINDIKATO
+        </div>
+      </div>
+    </div>
+  `;
+
+  modalBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Attach form submit listener
+  const form = document.getElementById('submitRecruitedHostForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newRecruit = {
+        recruiterId: document.getElementById('recruiterIdInput').value.trim(),
+        recruiterPayout: document.getElementById('recruiterPayoutInput').value.trim(),
+        realName: document.getElementById('recruitedHostName').value.trim(),
+        stageName: document.getElementById('recruitedHostStageName').value.trim(),
+        app: document.getElementById('recruitedHostApp').value,
+        hostId: document.getElementById('recruitedHostId').value.trim(),
+        diamonds: document.getElementById('recruitedHostDiamonds').value,
+        contact: document.getElementById('recruitedHostContact').value.trim(),
+        notes: document.getElementById('recruitedHostNotes').value.trim(),
+        date: new Date().toLocaleDateString()
+      };
+
+      const roster = JSON.parse(localStorage.getItem('sindikato_recruited_roster') || '[]');
+      roster.unshift(newRecruit);
+      localStorage.setItem('sindikato_recruited_roster', JSON.stringify(roster));
+
+      showToast(`Matagumpay na naisumite si ${newRecruit.stageName} sa Recruiter Roster!`);
+      renderRecruiterPortalModal('roster');
+    });
+  }
 }
 

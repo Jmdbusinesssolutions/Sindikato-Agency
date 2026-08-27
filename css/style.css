@@ -2087,3 +2087,201 @@ body.cursor-hover .custom-cursor-follower {
   text-transform: uppercase;
 }
 
+/* ==========================================================================
+   INTERACTIVE TALENT & RECRUITER PORTAL BOXES
+   ========================================================================== */
+.portals-container-wrap {
+  margin-top: 60px;
+  padding-top: 50px;
+  border-top: 1px solid var(--border-color);
+}
+
+.portals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+.portal-clickable-card {
+  background: linear-gradient(145deg, rgba(22, 26, 38, 0.9) 0%, rgba(10, 12, 18, 0.95) 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all var(--transition-smooth);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+}
+
+.portal-clickable-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--gold-gradient);
+  opacity: 0.7;
+  transition: opacity var(--transition-smooth), height var(--transition-smooth);
+}
+
+.portal-clickable-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-gold);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px var(--accent-gold-glow);
+}
+
+.portal-clickable-card:hover::before {
+  opacity: 1;
+  height: 6px;
+}
+
+.portal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.portal-icon-badge {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  background: rgba(212, 175, 55, 0.12);
+  border: 1.5px solid var(--accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 0 20px var(--accent-gold-glow);
+}
+
+.portal-status-pill {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(204, 255, 0, 0.1);
+  color: var(--accent-gold-bright);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.portal-title {
+  font-size: 1.9rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.portal-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--accent-gold-light);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.portal-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.portal-features-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.portal-features-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.portal-features-list li svg {
+  color: var(--accent-gold-bright);
+  flex-shrink: 0;
+}
+
+.portal-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: var(--radius-md);
+  background: var(--gold-gradient);
+  color: #06070a;
+  font-weight: 800;
+  font-size: 1rem;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 20px var(--accent-gold-glow);
+}
+
+.portal-clickable-card:hover .portal-action-btn {
+  filter: brightness(1.1);
+  transform: translateX(3px);
+}
+
+/* --- Portal Modal Tabs & Tables --- */
+.portal-tabs-nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.portal-tab-button {
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.portal-tab-button.active {
+  background: var(--gold-gradient);
+  color: #06070a;
+  border-color: var(--accent-gold);
+}
+
+.portal-records-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.portal-records-table th, .portal-records-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.88rem;
+}
+
+.portal-records-table th {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+
