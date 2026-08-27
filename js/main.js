@@ -867,58 +867,24 @@ function initHostRecruitment() {
 }
 
 // --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
-// DEFAULT HOST ROSTER DATA
-// --------------------------------------------------------------------------
-const DEFAULT_HOST_LIST = [
+// =========================================================================
+// OFFICIAL SINDIKATO HOST LIST (DIRECT CODE CONFIGURATION)
+// Dito mo maaaring i-add, i-edit, o tanggalin ang mga Host Streamers:
+// =========================================================================
+const HOST_LIST = [
   { idNumber: 'SIN-88201', idName: 'QueenMia_Live', validDays: '26 Days', liveTime: '88.5 hrs', giftRevenue: '₱94,500', gameRevenue: '₱42,300', app: 'TikTok LIVE' },
   { idNumber: 'SIN-77319', idName: 'Boss_King99', validDays: '24 Days', liveTime: '72.0 hrs', giftRevenue: '₱145,200', gameRevenue: '₱68,900', app: 'Bigo Live' },
   { idNumber: 'SIN-65482', idName: 'SweetAngel_PH', validDays: '28 Days', liveTime: '115.0 hrs', giftRevenue: '₱210,000', gameRevenue: '₱95,400', app: 'Poppo Live' },
   { idNumber: 'SIN-99120', idName: 'ShadowDJ_Live', validDays: '22 Days', liveTime: '64.5 hrs', giftRevenue: '₱76,800', gameRevenue: '₱31,200', app: 'TikTok LIVE' },
   { idNumber: 'SIN-54211', idName: 'Bella_Vibe', validDays: '25 Days', liveTime: '80.0 hrs', giftRevenue: '₱118,600', gameRevenue: '₱54,000', app: 'Bigo Live' },
   { idNumber: 'SIN-43109', idName: 'PrinceRaven', validDays: '21 Days', liveTime: '58.5 hrs', giftRevenue: '₱62,400', gameRevenue: '₱28,700', app: 'Poppo Live' }
+  // Mag-dagdag lamang ng bagong host dito:
+  // { idNumber: 'SIN-XXXXX', idName: 'Host_Name', validDays: '25 Days', liveTime: '80 hrs', giftRevenue: '₱50,000', gameRevenue: '₱25,000', app: 'TikTok LIVE' },
 ];
 
-function getHostList() {
-  const stored = localStorage.getItem('sindikato_host_roster');
-  if (!stored) {
-    localStorage.setItem('sindikato_host_roster', JSON.stringify(DEFAULT_HOST_LIST));
-    return DEFAULT_HOST_LIST;
-  }
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    return DEFAULT_HOST_LIST;
-  }
-}
-
-function saveHostList(list) {
-  localStorage.setItem('sindikato_host_roster', JSON.stringify(list));
-}
-
-// Global functions for Host List actions
-window.deleteHostItem = function(index) {
-  if (confirm('Sigurado ka bang nais mong tanggalin ang host na ito sa Host List?')) {
-    const list = getHostList();
-    list.splice(index, 1);
-    saveHostList(list);
-    showToast('Host record matagumpay na natanggal!');
-    renderHostPortalModal('list');
-  }
-};
-
-window.resetHostList = function() {
-  if (confirm('I-reset ang Host List sa default syndicate roster?')) {
-    saveHostList(DEFAULT_HOST_LIST);
-    showToast('Host List na-reset sa default records!');
-    renderHostPortalModal('list');
-  }
-};
-
 window.copyHostList = function() {
-  const list = getHostList();
   let text = '=== SINDIKATO AGENCY OFFICIAL HOST LIST ===\n\n';
-  list.forEach((h, i) => {
+  HOST_LIST.forEach((h, i) => {
     text += `${i + 1}. ID: ${h.idNumber} | Name: ${h.idName} | Valid Days: ${h.validDays} | Live Time: ${h.liveTime} | Gift Rev: ${h.giftRevenue} | Game Rev: ${h.gameRevenue} (${h.app || 'Live'})\n`;
   });
   navigator.clipboard.writeText(text).then(() => {
@@ -940,17 +906,14 @@ window.filterHostListTable = function() {
 };
 
 // --------------------------------------------------------------------------
-// RENDER HOST PORTAL MODAL (HOST LIST BY DEFAULT)
+// RENDER HOST PORTAL MODAL
 // --------------------------------------------------------------------------
 function renderHostPortalModal(activeTab = 'list') {
   const modalBackdrop = document.getElementById('caseStudyModal');
   const modalBody = document.getElementById('modalContentBody');
   if (!modalBackdrop || !modalBody) return;
 
-  const hostList = getHostList();
-
-  // Compute summary values
-  const totalHosts = hostList.length;
+  const totalHosts = HOST_LIST.length;
 
   modalBody.innerHTML = `
     <div style="margin-bottom: 20px;">
@@ -964,9 +927,8 @@ function renderHostPortalModal(activeTab = 'list') {
 
     <!-- Portal Navigation Tabs -->
     <div class="portal-tabs-nav">
-      <button class="portal-tab-button ${activeTab === 'list' ? 'active' : ''}" onclick="renderHostPortalModal('list')">1. 📋 Host List (${totalHosts})</button>
-      <button class="portal-tab-button ${activeTab === 'add' ? 'active' : ''}" onclick="renderHostPortalModal('add')">2. ➕ Add New Host</button>
-      <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">3. 💎 Guidelines & Milestones</button>
+      <button class="portal-tab-button ${activeTab === 'list' ? 'active' : ''}" onclick="renderHostPortalModal('list')">1. 📋 Official Host List (${totalHosts})</button>
+      <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">2. 💎 Guidelines & Milestones</button>
     </div>
 
     <!-- Tab 1: Host List Table -->
@@ -979,7 +941,7 @@ function renderHostPortalModal(activeTab = 'list') {
           <div class="lbl">Total Hosts</div>
         </div>
         <div class="host-summary-pill">
-          <div class="val">26 Max</div>
+          <div class="val">21 Days</div>
           <div class="lbl">Target Valid Days</div>
         </div>
         <div class="host-summary-pill">
@@ -1009,14 +971,8 @@ function renderHostPortalModal(activeTab = 'list') {
           >
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button type="button" class="btn btn-primary btn-pill" style="padding: 9px 16px; font-size: 0.82rem;" onclick="renderHostPortalModal('add')">
-            <span>+ Add Host</span>
-          </button>
-          <button type="button" class="btn btn-secondary btn-pill" style="padding: 9px 14px; font-size: 0.82rem;" onclick="copyHostList()">
+          <button type="button" class="btn btn-secondary btn-pill" style="padding: 9px 16px; font-size: 0.82rem;" onclick="copyHostList()">
             <span>Copy Roster</span>
-          </button>
-          <button type="button" class="btn btn-secondary btn-pill" style="padding: 9px 14px; font-size: 0.82rem;" onclick="resetHostList()">
-            <span>Reset</span>
           </button>
         </div>
       </div>
@@ -1033,11 +989,10 @@ function renderHostPortalModal(activeTab = 'list') {
               <th>Live Time</th>
               <th>Gift Revenue</th>
               <th>Game Revenue</th>
-              <th style="text-align: center;">Action</th>
             </tr>
           </thead>
           <tbody id="hostListTableBody">
-            ${hostList.length > 0 ? hostList.map((host, idx) => `
+            ${HOST_LIST.length > 0 ? HOST_LIST.map((host, idx) => `
               <tr>
                 <td style="font-family: var(--font-mono); color: var(--text-muted);">${idx + 1}</td>
                 <td>
@@ -1071,16 +1026,11 @@ function renderHostPortalModal(activeTab = 'list') {
                     🎮 ${host.gameRevenue}
                   </div>
                 </td>
-                <td style="text-align: center;">
-                  <button type="button" class="host-row-btn" onclick="deleteHostItem(${idx})" title="Tanggalin ang Host">
-                    ✕
-                  </button>
-                </td>
               </tr>
             `).join('') : `
               <tr>
-                <td colspan="8" style="text-align: center; padding: 32px; color: var(--text-muted);">
-                  Walang nakitang host record. I-click ang "+ Add New Host" o "Reset" sa itaas.
+                <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                  Walang nakitang host record sa HOST_LIST.
                 </td>
               </tr>
             `}
@@ -1093,68 +1043,7 @@ function renderHostPortalModal(activeTab = 'list') {
       </div>
     </div>
 
-    <!-- Tab 2: Add New Host Form -->
-    <div id="hostTabAdd" style="display: ${activeTab === 'add' ? 'block' : 'none'};">
-      <form id="addNewHostForm" style="background: rgba(0,0,0,0.25); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; color: var(--accent-gold-light);">Mag-rehistro ng Bagong Host sa Talaan</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Ipasok ang mga detalye ng host para awtomatikong maisama sa official Host List.</p>
-        
-        <div class="form-group-row">
-          <div class="form-group">
-            <label class="form-label">ID Number *</label>
-            <input type="text" id="newHostIdNumber" class="form-control" placeholder="e.g. SIN-90823 o 8374921" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">ID Name *</label>
-            <input type="text" id="newHostIdName" class="form-control" placeholder="e.g. QueenMia_Live o StarHost99" required>
-          </div>
-        </div>
-
-        <div class="form-group-row">
-          <div class="form-group">
-            <label class="form-label">Valid Days *</label>
-            <input type="text" id="newHostValidDays" class="form-control" placeholder="e.g. 26 Days o 24" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Live Time *</label>
-            <input type="text" id="newHostLiveTime" class="form-control" placeholder="e.g. 88.5 hrs o 120 hrs" required>
-          </div>
-        </div>
-
-        <div class="form-group-row">
-          <div class="form-group">
-            <label class="form-label">Gift Revenue *</label>
-            <input type="text" id="newHostGiftRevenue" class="form-control" placeholder="e.g. ₱94,500 o 1,500,000 Diamonds" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Game Revenue *</label>
-            <input type="text" id="newHostGameRevenue" class="form-control" placeholder="e.g. ₱42,300 o 800,000 Coins" required>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 20px;">
-          <label class="form-label">Live Streaming Platform</label>
-          <select id="newHostApp" class="form-control" style="background: rgba(14,17,26,0.9);">
-            <option value="TikTok LIVE">TikTok LIVE</option>
-            <option value="Bigo Live">Bigo Live</option>
-            <option value="Poppo Live">Poppo Live</option>
-            <option value="Likee">Likee</option>
-            <option value="Twitch">Twitch</option>
-            <option value="Other App">Other App</option>
-          </select>
-        </div>
-
-        <div style="display: flex; gap: 12px;">
-          <button type="submit" class="btn btn-primary" style="flex: 1; padding: 14px;">
-            <span>I-save sa Host List</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          </button>
-          <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Bumalik sa Host List</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Tab 3: Guidelines & Milestones -->
+    <!-- Tab 2: Guidelines & Milestones -->
     <div id="hostTabRules" style="display: ${activeTab === 'rules' ? 'block' : 'none'};">
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
@@ -1167,7 +1056,7 @@ function renderHostPortalModal(activeTab = 'list') {
         <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <h4 style="font-weight: 800; margin-bottom: 8px;">🛡️ Agency Streaming Standards</h4>
           <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-secondary);">
-            <li>✓ Minimum of 22 to 26 Valid Days buwan-buwan para ma-qualify sa full agency bonuses.</li>
+            <li>✓ Minimum of 21 Valid Days buwan-buwan para ma-qualify sa full agency bonuses.</li>
             <li>✓ Minimum of 60 to 120 Live Streaming Hours para sa elite syndicate tier standing.</li>
             <li>✓ <strong>LOYALTY • DISCIPLINE • RESPECT</strong> — Panatilihin ang professional agency representation sa lahat ng live broadcasts.</li>
           </ul>
@@ -1186,30 +1075,6 @@ function renderHostPortalModal(activeTab = 'list') {
 
   modalBackdrop.classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  // Attach Add Host Form submit handler
-  const addForm = document.getElementById('addNewHostForm');
-  if (addForm) {
-    addForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const newHost = {
-        idNumber: document.getElementById('newHostIdNumber').value.trim(),
-        idName: document.getElementById('newHostIdName').value.trim(),
-        validDays: document.getElementById('newHostValidDays').value.trim(),
-        liveTime: document.getElementById('newHostLiveTime').value.trim(),
-        giftRevenue: document.getElementById('newHostGiftRevenue').value.trim(),
-        gameRevenue: document.getElementById('newHostGameRevenue').value.trim(),
-        app: document.getElementById('newHostApp').value
-      };
-
-      const list = getHostList();
-      list.unshift(newHost);
-      saveHostList(list);
-
-      showToast(`Host ${newHost.idName} (${newHost.idNumber}) matagumpay na naidagdag sa Host List!`);
-      renderHostPortalModal('list');
-    });
-  }
 }
 
 // --------------------------------------------------------------------------
