@@ -826,7 +826,7 @@ function initHostRecruitment() {
   }
 
   // =========================================================================
-  // BOX 1: HOST PORTAL MODAL & DETAILS MANAGEMENT
+  // BOX 1: HOST MODAL & DETAILS MANAGEMENT
   // =========================================================================
   const openHostCard = document.getElementById('openHostPortalCard');
   if (openHostCard) {
@@ -836,12 +836,32 @@ function initHostRecruitment() {
   }
 
   // =========================================================================
-  // BOX 2: RECRUITER PORTAL MODAL & HOST SUBMISSION
+  // BOX 2: RECRUITER MODAL & HOST SUBMISSION
   // =========================================================================
   const openRecruiterCard = document.getElementById('openRecruiterPortalCard');
   if (openRecruiterCard) {
     openRecruiterCard.addEventListener('click', () => {
       renderRecruiterPortalModal();
+    });
+  }
+
+  // =========================================================================
+  // BOX 3: APPLY FOR SUB AGENCY MODAL
+  // =========================================================================
+  const openSubAgencyCard = document.getElementById('openSubAgencyCard');
+  if (openSubAgencyCard) {
+    openSubAgencyCard.addEventListener('click', () => {
+      renderSubAgencyModal();
+    });
+  }
+
+  // =========================================================================
+  // BOX 4: APPLY FOR RECRUITER MODAL
+  // =========================================================================
+  const openApplyRecruiterCard = document.getElementById('openApplyRecruiterCard');
+  if (openApplyRecruiterCard) {
+    openApplyRecruiterCard.addEventListener('click', () => {
+      renderApplyRecruiterModal();
     });
   }
 }
@@ -1314,4 +1334,228 @@ function renderRecruiterPortalModal(activeTab = 'submit') {
     });
   }
 }
+
+// --------------------------------------------------------------------------
+// RENDER SUB-AGENCY PARTNERSHIP MODAL
+// --------------------------------------------------------------------------
+function renderSubAgencyModal() {
+  const modalBackdrop = document.getElementById('caseStudyModal');
+  const modalBody = document.getElementById('modalContentBody');
+  if (!modalBackdrop || !modalBody) return;
+
+  modalBody.innerHTML = `
+    <div style="margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <span class="badge" style="margin-bottom: 0;">🏛️ MASTER SUB-AGENCY PARTNERSHIP</span>
+        <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">ENTERPRISE ALLIANCE</span>
+      </div>
+      <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Apply for Sub-Agency Partnership</h2>
+      <p style="color: var(--text-secondary); font-size: 0.92rem;">
+        Mag-apply bilang opisyal na Sub-Agency ng Sindikato. Pamahalaan ang iyong sariling team ng streamers at recruiters na may direct master agency split rates, enterprise dashboard, at VIP account support.
+      </p>
+    </div>
+
+    <form id="subAgencyApplicationForm">
+      <div class="form-group-row">
+        <div class="form-group">
+          <label class="form-label">Proposed Sub-Agency Name *</label>
+          <input type="text" id="subAgencyName" class="form-control" placeholder="e.g. Apex Diamond Media" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Agency Head / Master Leader Full Name *</label>
+          <input type="text" id="subAgencyLeader" class="form-control" placeholder="e.g. Roberto De Guzman" required>
+        </div>
+      </div>
+
+      <div class="form-group-row">
+        <div class="form-group">
+          <label class="form-label">Current / Estimated Host Team Size *</label>
+          <select id="subAgencyTeamSize" class="form-control" style="background: rgba(14,17,26,0.9);">
+            <option value="1-5 Hosts">1 – 5 Active Hosts</option>
+            <option value="6-20 Hosts" selected>6 – 20 Active Hosts</option>
+            <option value="21-50 Hosts">21 – 50 Active Hosts</option>
+            <option value="50+ Hosts">50+ Elite Host Streamers</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Streaming Platform Focus *</label>
+          <select id="subAgencyPlatform" class="form-control" style="background: rgba(14,17,26,0.9);">
+            <option value="TikTok LIVE">TikTok LIVE Focus</option>
+            <option value="Bigo Live">Bigo Live Focus</option>
+            <option value="Poppo Live">Poppo Live Focus</option>
+            <option value="Multi-Platform">Multi-Platform (All Apps)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group-row">
+        <div class="form-group">
+          <label class="form-label">Target Monthly Diamond Turnover *</label>
+          <select id="subAgencyDiamondGoal" class="form-control" style="background: rgba(14,17,26,0.9);">
+            <option value="5M - 15M Diamonds">💎 5M – 15M Diamonds / Month</option>
+            <option value="16M - 50M Diamonds" selected>💎 16M – 50M Diamonds / Month</option>
+            <option value="50M - 100M+ Diamonds">💎 50M – 100M+ Master Crown</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Mobile / WhatsApp *</label>
+          <input type="text" id="subAgencyContact" class="form-control" placeholder="e.g. +63 917 888 9999" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sub-Agency Growth Goals & Background *</label>
+        <textarea id="subAgencyNotes" class="form-control" style="min-height: 90px;" placeholder="Ibahagi ang iyong kasalukuyang streaming agency experience, mga plano para sa recruitment, at mga target platform..." required></textarea>
+      </div>
+
+      <div style="background: rgba(212,175,55,0.08); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 20px; font-size: 0.82rem; color: var(--accent-gold-light);">
+        🔒 VIP Partnership Review: Ang iyong sub-agency application ay direktang ididirekta sa Sindikato Agency Executive Directors para sa exclusive interview at terms alignment.
+      </div>
+
+      <div style="display: flex; gap: 14px;">
+        <button type="submit" class="btn btn-primary" style="flex: 1; padding: 16px;">
+          <span>Submit Sub-Agency Application</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
+      </div>
+    </form>
+  `;
+
+  modalBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const form = document.getElementById('subAgencyApplicationForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const appData = {
+        name: document.getElementById('subAgencyName').value.trim(),
+        leader: document.getElementById('subAgencyLeader').value.trim(),
+        size: document.getElementById('subAgencyTeamSize').value,
+        platform: document.getElementById('subAgencyPlatform').value,
+        goal: document.getElementById('subAgencyDiamondGoal').value,
+        contact: document.getElementById('subAgencyContact').value.trim(),
+        notes: document.getElementById('subAgencyNotes').value.trim(),
+        date: new Date().toLocaleDateString()
+      };
+
+      const apps = JSON.parse(localStorage.getItem('sindikato_subagency_applications') || '[]');
+      apps.unshift(appData);
+      localStorage.setItem('sindikato_subagency_applications', JSON.stringify(apps));
+
+      modalBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      showToast(`Matagumpay na naisumite ang application para sa ${appData.name}! Makikipag-ugnayan ang Master Agency Director sa loob ng 4 oras.`);
+    });
+  }
+}
+
+// --------------------------------------------------------------------------
+// RENDER APPLY FOR RECRUITER ONBOARDING MODAL
+// --------------------------------------------------------------------------
+function renderApplyRecruiterModal() {
+  const modalBackdrop = document.getElementById('caseStudyModal');
+  const modalBody = document.getElementById('modalContentBody');
+  if (!modalBackdrop || !modalBody) return;
+
+  modalBody.innerHTML = `
+    <div style="margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <span class="badge" style="margin-bottom: 0;">🤝 OFFICIAL RECRUITER ONBOARDING</span>
+        <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">ZERO REGISTRATION FEE</span>
+      </div>
+      <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Apply as Official Talent Recruiter</h2>
+      <p style="color: var(--text-secondary); font-size: 0.92rem;">
+        Sumali sa Sindikato Recruiter Network. Kumita ng direktang cash commissions (₱150 hanggang ₱5,000 bawat host milestone) bawat buwan. Walang puhunan o bayad sa pagpapatala.
+      </p>
+    </div>
+
+    <form id="recruiterOnboardingForm">
+      <div class="form-group-row">
+        <div class="form-group">
+          <label class="form-label">Your Full Name *</label>
+          <input type="text" id="recruiterApplicantName" class="form-control" placeholder="e.g. Christian Paul Mendoza" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preferred Recruiter Code / Agent Handle *</label>
+          <input type="text" id="recruiterApplicantCode" class="form-control" placeholder="e.g. AGENT-CHRIS / CP-RECRUIT" required>
+        </div>
+      </div>
+
+      <div class="form-group-row">
+        <div class="form-group">
+          <label class="form-label">Primary Scouting Platform *</label>
+          <select id="recruiterApplicantChannel" class="form-control" style="background: rgba(14,17,26,0.9);">
+            <option value="TikTok & Social Media">TikTok & Instagram Outreach</option>
+            <option value="Bigo & Live Streaming Apps">Bigo Live & Poppo Communities</option>
+            <option value="Facebook Groups & Referrals">Facebook Groups & Personal Network</option>
+            <option value="Influencer & Creator Network">Direct Influencer & Talent Circles</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estimated Monthly Recruits Target *</label>
+          <select id="recruiterApplicantGoal" class="form-control" style="background: rgba(14,17,26,0.9);">
+            <option value="1-3 Hosts (₱1,500 - ₱15,000 / mo)">1 – 3 Hosts / Month</option>
+            <option value="4-10 Hosts (₱10,000 - ₱50,000 / mo)" selected>4 – 10 Hosts / Month</option>
+            <option value="10+ Hosts (₱50,000+ / mo)">10+ Hosts Master Scout</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group-row">
+        <div class="form-group">
+          <label class="form-label">GCash / Maya / Bank Payout Account *</label>
+          <input type="text" id="recruiterApplicantPayout" class="form-control" placeholder="e.g. GCash 0917-123-4567" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Number / Telegram / WhatsApp *</label>
+          <input type="text" id="recruiterApplicantContact" class="form-control" placeholder="e.g. 0917-123-4567 / @telegram_handle" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Why do you want to recruit with Sindikato Agency? *</label>
+        <textarea id="recruiterApplicantReason" class="form-control" style="min-height: 80px;" placeholder="Ibahagi ang iyong recruitment strategy o background sa live streaming..." required></textarea>
+      </div>
+
+      <div style="display: flex; gap: 14px;">
+        <button type="submit" class="btn btn-primary" style="flex: 1; padding: 16px;">
+          <span>Complete Recruiter Onboarding</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
+      </div>
+    </form>
+  `;
+
+  modalBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const form = document.getElementById('recruiterOnboardingForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const recruiterData = {
+        name: document.getElementById('recruiterApplicantName').value.trim(),
+        code: document.getElementById('recruiterApplicantCode').value.trim(),
+        channel: document.getElementById('recruiterApplicantChannel').value,
+        goal: document.getElementById('recruiterApplicantGoal').value,
+        payout: document.getElementById('recruiterApplicantPayout').value.trim(),
+        contact: document.getElementById('recruiterApplicantContact').value.trim(),
+        reason: document.getElementById('recruiterApplicantReason').value.trim(),
+        onboardedAt: new Date().toLocaleDateString()
+      };
+
+      const apps = JSON.parse(localStorage.getItem('sindikato_recruiter_applications') || '[]');
+      apps.unshift(recruiterData);
+      localStorage.setItem('sindikato_recruiter_applications', JSON.stringify(apps));
+
+      modalBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      showToast(`Maligayang pagdating sa Sindikato Recruiter Network, Agent ${recruiterData.code}! Ipinadala na ang iyong onboarding packet.`);
+    });
+  }
+}
+
 
