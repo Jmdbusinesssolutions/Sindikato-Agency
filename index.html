@@ -568,17 +568,104 @@
   </section>
 
   <!-- =========================================================================
-       HOST RECRUITMENT & COMMISSION PROGRAM
+       HOST MONTHLY SALARY & RECRUITMENT COMMISSION PROGRAM
        ========================================================================= -->
   <section id="commission" class="section-padding commission-section">
     <div class="container">
       <div class="section-header">
-        <span class="badge">✦ HOST RECRUITMENT & TALENT MANAGEMENT</span>
-        <h2 class="section-title">Host Recruitment <span class="italic-accent">Commission Program.</span></h2>
-        <p class="section-subtitle">Earn direct cash commission rewards based on your recruited host's monthly diamond achievements. Recruit, support, and help your hosts succeed under Sindikato Agency.</p>
+        <span class="badge">✦ TALENT EARNINGS & RECRUITMENT PROGRAM</span>
+        <h2 class="section-title">Host Monthly Salary <span class="italic-accent">& Commission Structure.</span></h2>
+        <p class="section-subtitle">Official Sindikato streamer monthly earnings (Basic Salary + Gift Share + Bonuses up to ₱801,333/mo) and recruiter milestone cash rewards.</p>
       </div>
 
-      <div class="commission-grid">
+      <!-- Schedule Selector Switcher -->
+      <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 36px; flex-wrap: wrap;">
+        <button type="button" id="tabHostSalaryBtn" class="portal-tab-button active" onclick="switchCommissionView('host-salary')" style="padding: 12px 24px; font-size: 0.95rem;">
+          <span>👑 Host Monthly Salary Schedule (W-1 to W-19)</span>
+        </button>
+        <button type="button" id="tabRecruiterCommBtn" class="portal-tab-button" onclick="switchCommissionView('recruiter-comm')" style="padding: 12px 24px; font-size: 0.95rem;">
+          <span>💼 Recruiter Milestone Commission Schedule</span>
+        </button>
+      </div>
+
+      <!-- VIEW 1: HOST MONTHLY SALARY -->
+      <div id="hostSalaryView" class="commission-grid">
+        <!-- Host Salary Poster Wrap -->
+        <div class="commission-poster-wrap" id="hostSalaryPosterWrap" title="Click to enlarge official Host Monthly Salary table">
+          <img src="assets/images/sindikato-host-salary.png" alt="Sindikato Agency Host Monthly Salary Structure" class="commission-poster-img">
+          <div class="poster-zoom-hint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+            <span>Click to Enlarge Host Salary Table</span>
+          </div>
+        </div>
+
+        <!-- Host Salary Highlights & Perks -->
+        <div class="commission-content-panel">
+          <div>
+            <span class="badge" style="margin-bottom: 10px;">LEVEL W-1 TO W-19 TIERS</span>
+            <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 8px;">Guaranteed Earnings & Growth</h3>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+              Stream with Sindikato Agency and unlock multi-tiered compensation: Basic Monthly Salary, Gift Share, Monthly Gift Bonuses, and Live Duration Payouts.
+            </p>
+          </div>
+
+          <!-- Highlight Key Level Metrics -->
+          <div class="tiers-table-grid">
+            <div class="tier-item-card">
+              <div class="tier-diamonds" style="color: #60a5fa;">Level W-1</div>
+              <div class="tier-reward">₱2,500</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">300K Task / 15 Days</div>
+            </div>
+            <div class="tier-item-card">
+              <div class="tier-diamonds" style="color: #60a5fa;">Level W-5</div>
+              <div class="tier-reward">₱26,320</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">3M Task / 30 Hrs</div>
+            </div>
+            <div class="tier-item-card">
+              <div class="tier-diamonds" style="color: #facc15;">Level W-10</div>
+              <div class="tier-reward">₱126,000</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">15M Task + ₱14K Bonus</div>
+            </div>
+            <div class="tier-item-card">
+              <div class="tier-diamonds" style="color: #facc15;">Level W-14</div>
+              <div class="tier-reward">₱404,667</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">50M Task + ₱50K Bonus</div>
+            </div>
+            <div class="tier-item-card">
+              <div class="tier-diamonds" style="color: #5eead4;">Level W-17</div>
+              <div class="tier-reward">₱642,667</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">80M Task + ₱80K Bonus</div>
+            </div>
+            <div class="tier-item-card">
+              <div class="tier-diamonds" style="color: #5eead4;">Level W-19</div>
+              <div class="tier-reward">₱801,333</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">100M Task Elite Tier</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(212,175,55,0.08); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 0.84rem; color: var(--accent-gold-light); line-height: 1.5;">
+            💎 <strong>Extra Diamond Multiplier:</strong> Starting from 20M Diamonds, every additional 10M Diamonds achieved receives an extra <strong>₱10,000 PHP Cash Bonus</strong>.
+          </div>
+
+          <!-- Motto Ribbon & Apply Action -->
+          <div class="sindikato-motto-ribbon">
+            LOYALTY • DISCIPLINE • RESPECT — WE ARE THE SINDIKATO
+          </div>
+
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary" style="flex: 1;" onclick="renderHostPortalModal('list')">
+              <span>View Official Host List</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <a href="#contact" class="btn btn-secondary">
+              <span>Talent Inquiry</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: RECRUITER COMMISSION (Hidden by default, toggled via switcher) -->
+      <div id="recruiterCommView" class="commission-grid" style="display: none;">
         <!-- Left: Official Syndicate Baroque Poster Card -->
         <div class="commission-poster-wrap" id="commissionPosterWrap" title="Click to view full poster image">
           <img src="assets/images/sindikato-commission.jpg" alt="Sindikato Agency Host Recruitment Commission Schedule" class="commission-poster-img">
@@ -681,7 +768,7 @@
 
           <div style="display: flex; gap: 14px; flex-wrap: wrap;">
             <button type="button" id="applyRecruiterBtn" class="btn btn-primary" style="flex: 1;">
-              <span>Apply as Host / Recruiter</span>
+              <span>Apply as Recruiter</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
             <a href="#contact" class="btn btn-secondary">

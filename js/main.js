@@ -783,7 +783,57 @@ function initHostRecruitment() {
 
   updateRecruiterEarnings();
 
-  // Poster Lightbox Zoom Modal
+  // Switch between Host Salary & Recruiter Commission views
+  window.switchCommissionView = function(view) {
+    const hostView = document.getElementById('hostSalaryView');
+    const recruiterView = document.getElementById('recruiterCommView');
+    const hostBtn = document.getElementById('tabHostSalaryBtn');
+    const recruiterBtn = document.getElementById('tabRecruiterCommBtn');
+
+    if (view === 'host-salary') {
+      if (hostView) hostView.style.display = 'grid';
+      if (recruiterView) recruiterView.style.display = 'none';
+      if (hostBtn) hostBtn.classList.add('active');
+      if (recruiterBtn) recruiterBtn.classList.remove('active');
+    } else {
+      if (hostView) hostView.style.display = 'none';
+      if (recruiterView) recruiterView.style.display = 'grid';
+      if (hostBtn) hostBtn.classList.remove('active');
+      if (recruiterBtn) recruiterBtn.classList.add('active');
+    }
+  };
+
+  // Host Monthly Salary Lightbox Zoom Modal
+  const hostSalaryPosterWrap = document.getElementById('hostSalaryPosterWrap');
+  if (hostSalaryPosterWrap) {
+    hostSalaryPosterWrap.addEventListener('click', () => {
+      const modalBackdrop = document.getElementById('caseStudyModal');
+      const modalBody = document.getElementById('modalContentBody');
+      if (!modalBackdrop || !modalBody) return;
+
+      modalBody.innerHTML = `
+        <div style="text-align: center;">
+          <span class="badge">OFFICIAL STREAMER SALARY MATRIX</span>
+          <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; margin-bottom: 20px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Sindikato Host Monthly Salary (W-1 to W-19)</h2>
+          <div style="max-width: 900px; margin: 0 auto 24px auto; border-radius: var(--radius-md); overflow: hidden; border: 2px solid var(--accent-gold); box-shadow: 0 10px 40px rgba(0,0,0,0.8);">
+            <img src="assets/images/sindikato-host-salary.png" alt="Sindikato Host Monthly Salary Full Table" style="width: 100%; height: auto; display: block;">
+          </div>
+          <div class="sindikato-motto-ribbon" style="margin-bottom: 24px;">
+            LOYALTY • DISCIPLINE • RESPECT — WE ARE THE SINDIKATO
+          </div>
+          <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+            <a href="#contact" class="btn btn-primary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Apply as Host Streamer</a>
+            <button class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close Image</button>
+          </div>
+        </div>
+      `;
+
+      modalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  // Recruiter Poster Lightbox Zoom Modal
   if (posterWrap) {
     posterWrap.addEventListener('click', () => {
       const modalBackdrop = document.getElementById('caseStudyModal');
@@ -1283,7 +1333,18 @@ function renderHostPortalModal(activeTab = 'list') {
     <div id="hostTabRules" style="display: ${activeTab === 'rules' ? 'block' : 'none'};">
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-          <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💎 Revenue Payout Schedule & Validity</h4>
+          <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💎 Official Host Monthly Salary Matrix (W-1 to W-19)</h4>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
+            Official Sindikato streamer compensation breakdown based on target monthly diamonds, basic salary, gift share, monthly gift bonus, and live duration incentives:
+          </p>
+          <div style="border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--accent-gold); box-shadow: 0 8px 30px rgba(0,0,0,0.6); margin-bottom: 10px;">
+            <img src="assets/images/sindikato-host-salary.png" alt="Official Host Monthly Salary Matrix" style="width: 100%; height: auto; display: block; cursor: pointer;" onclick="window.open('assets/images/sindikato-host-salary.png', '_blank')">
+          </div>
+          <div style="font-size: 0.76rem; color: var(--accent-gold-light); text-align: center;">🔍 Click image to open high-resolution salary matrix in new tab.</div>
+        </div>
+
+        <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">📅 Revenue Payout Schedule & Validity</h4>
           <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
             All official Gift Revenue and Game Revenue are computed monthly based on your total <strong>Valid Days</strong> and <strong>Live Streaming Time</strong>. Payouts are officially released on the <strong>5th and 20th of every month</strong> directly to your registered GCash, Maya, or Bank account.
           </p>
