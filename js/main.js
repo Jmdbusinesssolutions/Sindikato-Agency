@@ -293,75 +293,82 @@ function initPortfolioFilters() {
 }
 
 /* --------------------------------------------------------------------------
-   8. CASE STUDY MODAL DETAILS
+   8. PK BATTLES & LIVE TOURNAMENT DETAILS
    -------------------------------------------------------------------------- */
 const caseStudiesData = {
-  'aura-living': {
-    title: 'Aura Haute Living',
-    tagline: 'Hyper-Luxury Real Estate & WebGL Architecture',
-    client: 'Aura Group Dubai',
-    year: '2025-2026',
-    category: 'The Web / Branding',
+  'pk-queenmia': {
+    title: 'Queen Mia vs King Marco',
+    tagline: 'TikTok LIVE Official Syndicate Championship PK Battle',
+    client: 'Sindikato Talent League',
+    year: '2026 Season',
+    category: 'TikTok LIVE / PK Championship',
     liveUrl: '#',
-    overview: 'Aura Haute Living is a flagship ultra-luxury penthouse development overlooking Dubai Canal and Palm Jumeirah. They commissioned Sindikato to craft a world-first immersive 3D digital showroom, elevated brand identity, and multi-tier investor portal.',
-    impact: ['320% Increase in qualified Ultra-High-Net-Worth leads', 'AED 140M in off-plan bookings in first 60 days', 'Nominated for Awwwards Site of the Year 2025'],
-    stack: ['Three.js / WebGL', 'GSAP Animation Suite', 'Next.js 15', 'Tailwind CSS', 'Headless Sanity CMS']
+    overview: 'A high-voltage 4-round championship PK battle on TikTok LIVE between Sindikato top performers Queen Mia and King Marco. Featuring synchronized audience gifting, speed challenge triggers, and live score multiplier surges.',
+    impact: ['15.2M Diamonds achieved in single 30-min battle', '52,000 Concurrent live viewers across streams', 'Promoted Queen Mia to Level W-14 Syndicate Tier'],
+    stack: ['TikTok LIVE Arena', 'Custom PK Overlays', 'Live Agency Moderation', 'VIP Gift Drops']
   },
-  'solstice-audio': {
-    title: 'Solstice Audio Lab',
-    tagline: 'Spatial Audio Brand Identity & E-Commerce Flagship',
-    client: 'Solstice Sound Tokyo / London',
-    year: '2025',
-    category: 'Brand / Web & Tech',
+  'pk-solstice': {
+    title: 'Neon Blaze vs Crystal Diva',
+    tagline: 'Bigo Live Diamond Super-Clash',
+    client: 'Bigo Syndicate Arena',
+    year: '2026 Season',
+    category: 'Bigo Live / Diamond Battle',
     liveUrl: '#',
-    overview: 'Solstice designs acoustic monitors for Grammy-winning audio engineers. Sindikato built their global brand system, custom parametric product visualizer, and high-conversion e-commerce storefront with sub-second page loads.',
-    impact: ['4.8x Return on Ad Spend (ROAS)', 'Global sellout of initial 10,000 units within 72 hours', 'Featured in Wallpaper* and Design Milk'],
-    stack: ['Shopify Plus Headless', 'Custom 3D Configurator', 'Figma Design System', 'Stripe Global Payments']
+    overview: 'Bigo Live prime-time PK showdown featuring intense musical duets, speed combo gifts, and agency-backed bean rallies.',
+    impact: ['8.5M Beans recorded during match', 'Top #1 Trending streamer room in Southeast Asia', 'Level W-12 Agency Milestone Unlocked'],
+    stack: ['Bigo Live PK Mode', 'Audio Visualizer', 'Bean Surge Tracker', 'Multi-Beam Streaming']
   },
-  'kroma-fintech': {
-    title: 'Kroma Fintech',
-    tagline: 'Institutional Digital Asset Ecosystem & Mobile Platform',
-    client: 'Kroma Capital Singapore',
-    year: '2025',
-    category: 'The Web & Tech',
+  'pk-poppo': {
+    title: 'Shadow Lord vs Empress Lux',
+    tagline: 'Poppo Live International Syndicate Cup',
+    client: 'Poppo Global League',
+    year: '2026 Season',
+    category: 'Poppo Live / International PK',
     liveUrl: '#',
-    overview: 'Kroma provides compliant treasury management for Web3 institutions. We executed a complete brand refresh, complex UI/UX design architecture, and high-frequency reactive charting interface.',
-    impact: ['$1.2B in institutional transaction volume handled', 'Sub-50ms latency charting experience', 'Best Fintech UX Award 2025'],
-    stack: ['React', 'TypeScript', 'D3.js / TradingView Lightweight Charts', 'WebSockets', 'Design Token Pipeline']
+    overview: 'High-stakes multi-country room battle with international supporters showering exclusive agency animations and luxury yacht gifts.',
+    impact: ['12M Coins tallied across 5 match sets', 'Record room engagement rate of 94%', 'Empress Lux awarded VIP Crown Title'],
+    stack: ['Poppo Live Multi-Guest', 'Syndicate Gifting Bot', 'Crown Leaderboard API', 'Live Stream Studio']
   },
-  'nox-vanguard': {
-    title: 'Nox Vanguard Spirits',
-    tagline: 'Artisanal Ultra-Premium Botanical Spirits Brand',
-    client: 'Vanguard Distilleries',
-    year: '2024',
-    category: 'The Brand / Media',
+  'pk-nox': {
+    title: 'Midnight Siren vs Velvet Crown',
+    tagline: 'TikTok LIVE Viral Midnight PK League',
+    client: 'Sindikato After-Hours',
+    year: '2026 Season',
+    category: 'TikTok LIVE / Night League',
     liveUrl: '#',
-    overview: 'An avant-garde craft distillery blending ancient botanical distillation with futuristic sensory aesthetics. Sindikato developed the bottle industrial design, bespoke typography, launch cinema film, and viral marketing campaign.',
-    impact: ['15M+ Impressions across organic TikTok & IG campaigns', 'Gold Medal for Packaging Excellence (PentaAwards)', 'Distributed in 24 Michelin-star venues globally'],
-    stack: ['Custom Typography', 'CGI Bottle 3D Renderings', 'Cinema 4D / Octane', 'Strategic Influencer Rollout']
+    overview: 'The highest-ranked midnight livestream battle with non-stop speed challenges, mystery box bonuses, and live fan leaderboards.',
+    impact: ['10M Diamonds in 45 minutes', 'Top 5 National Discover Tab Placement', '25,000 New followers acquired during live'],
+    stack: ['TikTok LIVE Creator Tools', 'Interactive Soundboard', 'Real-time Combo Display']
   },
-  'vortex-media': {
-    title: 'Vortex Music & Festival',
-    tagline: 'Southeast Asia’s Largest Immersive Audiovisual Festival',
-    client: 'Vortex Live SEA',
-    year: '2025',
-    category: 'The Noise & Media',
+  'pk-vortex': {
+    title: 'Golden Ace vs Phoenix Queen',
+    tagline: 'All-Star Grand Super-Cup Championship',
+    client: 'Sindikato Master Syndicate',
+    year: '2026 Season',
+    category: 'Cross-Platform / Grand Final',
     liveUrl: '#',
-    overview: 'Sindikato handled end-to-end creative direction, stage visual design, artist lineup announcements, social media architecture, and dynamic ticketing web application for 45,000 festival attendees.',
-    impact: ['Sold out 45,000 tickets in 18 minutes', 'Over 85M social video views during launch week', '#1 Trending topic across Philippines & Singapore'],
-    stack: ['Unreal Engine 5 Stage Visuals', 'Next.js Ticketing App', 'After Effects Motion Graphics', 'Omni-channel Ad Strategy']
+    overview: 'The largest cross-platform streamer tournament final of the year, bringing together top talent from TikTok, Bigo, and Poppo in a hybrid battle showcase.',
+    impact: ['25M Milestone diamonds reached', 'Over 45,000 live broadcast viewers', 'Winner qualified for Level W-19 ₱801K monthly salary standing'],
+    stack: ['Multi-App Sync', '4K Broadcast Production', 'LED Stage Visuals', 'Syndicate Payout Engine']
   },
-  'hyperion-aero': {
-    title: 'Hyperion Aerospace',
-    tagline: 'Autonomous Cargo Aviation Platform',
-    client: 'Hyperion Dynamics',
-    year: '2026',
-    category: 'The Web & Tech',
+  'pk-hyperion': {
+    title: 'Thunder King vs Apex Vibe',
+    tagline: 'Creator Showcase & Exhibition PK Match',
+    client: 'Sindikato Scouting Network',
+    year: '2026 Season',
+    category: 'Creator Showcase / Exhibition',
     liveUrl: '#',
-    overview: 'Hyperion is pioneering unmanned heavy-lift electric air cargo. We engineered their enterprise dashboard, flight route simulator, and investor pitch portal with real-time telemetry visualization.',
-    impact: ['$85M Series B funding secured', 'Adopted by 6 major global supply chain consortiums', 'Zero downtime deployment'],
-    stack: ['Mapbox GL JS', 'FastAPI Backend Integration', 'Vue 3 Enterprise Architecture', 'WebGL Shaders']
-  }
+    overview: 'Exhibition match highlighting new agency talent recruits demonstrating PK battle strategy, viewer retention techniques, and charisma.',
+    impact: ['6.8M Diamonds generated', '100% Talent contract signing rate', 'Dispatched recruiter bonuses in real-time'],
+    stack: ['Live Mobile Studio', 'High-Gain Microphones', 'Studio Lighting Setup']
+  },
+  // Legacy aliases for backward compatibility
+  'aura-living': { title: 'Queen Mia vs King Marco', tagline: 'TikTok LIVE Official Syndicate Championship', client: 'Sindikato Talent League', year: '2026', category: 'TikTok LIVE / PK', liveUrl: '#', overview: 'Epic 4-Round Official Agency PK Battle.', impact: ['15.2M Diamonds achieved'], stack: ['TikTok LIVE'] },
+  'solstice-audio': { title: 'Neon Blaze vs Crystal Diva', tagline: 'Bigo Live Diamond Super-Clash', client: 'Bigo Syndicate', year: '2026', category: 'Bigo Live / PK', liveUrl: '#', overview: 'Bigo Live prime-time PK showdown.', impact: ['8.5M Beans recorded'], stack: ['Bigo Live'] },
+  'kroma-fintech': { title: 'Shadow Lord vs Empress Lux', tagline: 'Poppo Live International Cup', client: 'Poppo League', year: '2026', category: 'Poppo Live / PK', liveUrl: '#', overview: 'High-stakes multi-country room battle.', impact: ['12M Coins tallied'], stack: ['Poppo Live'] },
+  'nox-vanguard': { title: 'Midnight Siren vs Velvet Crown', tagline: 'TikTok LIVE Midnight League', client: 'Sindikato League', year: '2026', category: 'TikTok LIVE / PK', liveUrl: '#', overview: 'Midnight livestream battle.', impact: ['10M Diamonds achieved'], stack: ['TikTok LIVE'] },
+  'vortex-media': { title: 'Golden Ace vs Phoenix Queen', tagline: 'All-Star Grand Super-Cup', client: 'Sindikato Syndicate', year: '2026', category: 'Cross-Platform PK', liveUrl: '#', overview: 'Largest cross-platform streamer tournament final.', impact: ['25M Milestone diamonds reached'], stack: ['4K Broadcast'] },
+  'hyperion-aero': { title: 'Thunder King vs Apex Vibe', tagline: 'Creator Showcase Exhibition', client: 'Sindikato Scouting', year: '2026', category: 'Exhibition PK', liveUrl: '#', overview: 'Exhibition match for new recruits.', impact: ['6.8M Diamonds generated'], stack: ['Live Studio'] }
 };
 
 function initCaseStudyModals() {
