@@ -867,189 +867,318 @@ function initHostRecruitment() {
 }
 
 // --------------------------------------------------------------------------
-// RENDER HOST PORTAL MODAL
 // --------------------------------------------------------------------------
-function renderHostPortalModal(activeTab = 'form') {
+// DEFAULT HOST ROSTER DATA
+// --------------------------------------------------------------------------
+const DEFAULT_HOST_LIST = [
+  { idNumber: 'SIN-88201', idName: 'QueenMia_Live', validDays: '26 Days', liveTime: '88.5 hrs', giftRevenue: '₱94,500', gameRevenue: '₱42,300', app: 'TikTok LIVE' },
+  { idNumber: 'SIN-77319', idName: 'Boss_King99', validDays: '24 Days', liveTime: '72.0 hrs', giftRevenue: '₱145,200', gameRevenue: '₱68,900', app: 'Bigo Live' },
+  { idNumber: 'SIN-65482', idName: 'SweetAngel_PH', validDays: '28 Days', liveTime: '115.0 hrs', giftRevenue: '₱210,000', gameRevenue: '₱95,400', app: 'Poppo Live' },
+  { idNumber: 'SIN-99120', idName: 'ShadowDJ_Live', validDays: '22 Days', liveTime: '64.5 hrs', giftRevenue: '₱76,800', gameRevenue: '₱31,200', app: 'TikTok LIVE' },
+  { idNumber: 'SIN-54211', idName: 'Bella_Vibe', validDays: '25 Days', liveTime: '80.0 hrs', giftRevenue: '₱118,600', gameRevenue: '₱54,000', app: 'Bigo Live' },
+  { idNumber: 'SIN-43109', idName: 'PrinceRaven', validDays: '21 Days', liveTime: '58.5 hrs', giftRevenue: '₱62,400', gameRevenue: '₱28,700', app: 'Poppo Live' }
+];
+
+function getHostList() {
+  const stored = localStorage.getItem('sindikato_host_roster');
+  if (!stored) {
+    localStorage.setItem('sindikato_host_roster', JSON.stringify(DEFAULT_HOST_LIST));
+    return DEFAULT_HOST_LIST;
+  }
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    return DEFAULT_HOST_LIST;
+  }
+}
+
+function saveHostList(list) {
+  localStorage.setItem('sindikato_host_roster', JSON.stringify(list));
+}
+
+// Global functions for Host List actions
+window.deleteHostItem = function(index) {
+  if (confirm('Sigurado ka bang nais mong tanggalin ang host na ito sa Host List?')) {
+    const list = getHostList();
+    list.splice(index, 1);
+    saveHostList(list);
+    showToast('Host record matagumpay na natanggal!');
+    renderHostPortalModal('list');
+  }
+};
+
+window.resetHostList = function() {
+  if (confirm('I-reset ang Host List sa default syndicate roster?')) {
+    saveHostList(DEFAULT_HOST_LIST);
+    showToast('Host List na-reset sa default records!');
+    renderHostPortalModal('list');
+  }
+};
+
+window.copyHostList = function() {
+  const list = getHostList();
+  let text = '=== SINDIKATO AGENCY OFFICIAL HOST LIST ===\n\n';
+  list.forEach((h, i) => {
+    text += `${i + 1}. ID: ${h.idNumber} | Name: ${h.idName} | Valid Days: ${h.validDays} | Live Time: ${h.liveTime} | Gift Rev: ${h.giftRevenue} | Game Rev: ${h.gameRevenue} (${h.app || 'Live'})\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Host List copied to clipboard!');
+  }).catch(() => {
+    showToast('Host List data ready!');
+  });
+};
+
+window.filterHostListTable = function() {
+  const input = document.getElementById('hostListSearchInput');
+  if (!input) return;
+  const query = input.value.toLowerCase();
+  const rows = document.querySelectorAll('#hostListTableBody tr');
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(query) ? '' : 'none';
+  });
+};
+
+// --------------------------------------------------------------------------
+// RENDER HOST PORTAL MODAL (HOST LIST BY DEFAULT)
+// --------------------------------------------------------------------------
+function renderHostPortalModal(activeTab = 'list') {
   const modalBackdrop = document.getElementById('caseStudyModal');
   const modalBody = document.getElementById('modalContentBody');
   if (!modalBackdrop || !modalBody) return;
 
-  const savedHost = JSON.parse(localStorage.getItem('sindikato_host_profile') || 'null');
+  const hostList = getHostList();
+
+  // Compute summary values
+  const totalHosts = hostList.length;
 
   modalBody.innerHTML = `
     <div style="margin-bottom: 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
         <span class="badge" style="margin-bottom: 0;">👑 OFFICIAL HOST PORTAL</span>
         <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">SINDIKATO STREAMER VAULT</span>
       </div>
-      <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Host Details & Live Streamer Portal</h2>
-      <p style="color: var(--text-secondary); font-size: 0.92rem;">I-save ang iyong live stream profile details, schedule, at subaybayan ang iyong diamond targets & agency payout account.</p>
+      <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Host List & Streamer Performance</h2>
+      <p style="color: var(--text-secondary); font-size: 0.92rem;">Subaybayan ang real-time records ng mga host: ID number, ID name, Valid days, Live time, Gift Revenue, at Game Revenue.</p>
     </div>
 
     <!-- Portal Navigation Tabs -->
     <div class="portal-tabs-nav">
-      <button class="portal-tab-button ${activeTab === 'form' ? 'active' : ''}" onclick="renderHostPortalModal('form')">1. Host Profile & Details Form</button>
-      <button class="portal-tab-button ${activeTab === 'dashboard' ? 'active' : ''}" onclick="renderHostPortalModal('dashboard')">2. My Host Status Card</button>
-      <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">3. Streaming Guidelines & Milestones</button>
+      <button class="portal-tab-button ${activeTab === 'list' ? 'active' : ''}" onclick="renderHostPortalModal('list')">1. 📋 Host List (${totalHosts})</button>
+      <button class="portal-tab-button ${activeTab === 'add' ? 'active' : ''}" onclick="renderHostPortalModal('add')">2. ➕ Add New Host</button>
+      <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">3. 💎 Guidelines & Milestones</button>
     </div>
 
-    <!-- Tab 1: Registration Form -->
-    <div id="hostTabForm" style="display: ${activeTab === 'form' ? 'block' : 'none'};">
-      <form id="hostDetailsForm">
+    <!-- Tab 1: Host List Table -->
+    <div id="hostTabList" style="display: ${activeTab === 'list' ? 'block' : 'none'};">
+      
+      <!-- Top Summary Badges -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 18px;">
+        <div class="host-summary-pill">
+          <div class="val">${totalHosts}</div>
+          <div class="lbl">Total Hosts</div>
+        </div>
+        <div class="host-summary-pill">
+          <div class="val">26 Max</div>
+          <div class="lbl">Target Valid Days</div>
+        </div>
+        <div class="host-summary-pill">
+          <div class="val">Live Verified</div>
+          <div class="lbl">Live Time Status</div>
+        </div>
+        <div class="host-summary-pill">
+          <div class="val">Gift Tier</div>
+          <div class="lbl">Gift Revenue</div>
+        </div>
+        <div class="host-summary-pill">
+          <div class="val">Game Tier</div>
+          <div class="lbl">Game Revenue</div>
+        </div>
+      </div>
+
+      <!-- Search and Action Bar -->
+      <div style="display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+        <div style="flex: 1; min-width: 240px; position: relative;">
+          <input 
+            type="text" 
+            id="hostListSearchInput" 
+            class="form-control" 
+            placeholder="🔍 Mag-search ayon sa ID number o ID name..." 
+            oninput="filterHostListTable()"
+            style="padding: 10px 14px; font-size: 0.88rem; background: rgba(0,0,0,0.4);"
+          >
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary btn-pill" style="padding: 9px 16px; font-size: 0.82rem;" onclick="renderHostPortalModal('add')">
+            <span>+ Add Host</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-pill" style="padding: 9px 14px; font-size: 0.82rem;" onclick="copyHostList()">
+            <span>Copy Roster</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-pill" style="padding: 9px 14px; font-size: 0.82rem;" onclick="resetHostList()">
+            <span>Reset</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Host List Table -->
+      <div class="host-table-wrapper">
+        <table class="portal-records-table" id="hostRecordsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>ID Number</th>
+              <th>ID Name</th>
+              <th>Valid Days</th>
+              <th>Live Time</th>
+              <th>Gift Revenue</th>
+              <th>Game Revenue</th>
+              <th style="text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="hostListTableBody">
+            ${hostList.length > 0 ? hostList.map((host, idx) => `
+              <tr>
+                <td style="font-family: var(--font-mono); color: var(--text-muted);">${idx + 1}</td>
+                <td>
+                  <span style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold-bright); background: rgba(212,175,55,0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(212,175,55,0.25);">
+                    ${host.idNumber}
+                  </span>
+                  ${host.app ? `<div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">${host.app}</div>` : ''}
+                </td>
+                <td>
+                  <div style="font-weight: 800; color: var(--text-primary); font-size: 0.95rem;">
+                    ${host.idName}
+                  </div>
+                </td>
+                <td>
+                  <span style="display: inline-block; font-weight: 700; color: #5eead4; background: rgba(94,234,212,0.1); padding: 3px 8px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.82rem;">
+                    📅 ${host.validDays}
+                  </span>
+                </td>
+                <td>
+                  <span style="display: inline-block; font-weight: 700; color: #93c5fd; background: rgba(147,197,253,0.1); padding: 3px 8px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.82rem;">
+                    ⏱️ ${host.liveTime}
+                  </span>
+                </td>
+                <td>
+                  <div style="font-weight: 800; color: #facc15; font-family: var(--font-mono); font-size: 0.92rem;">
+                    🎁 ${host.giftRevenue}
+                  </div>
+                </td>
+                <td>
+                  <div style="font-weight: 800; color: #a7f3d0; font-family: var(--font-mono); font-size: 0.92rem;">
+                    🎮 ${host.gameRevenue}
+                  </div>
+                </td>
+                <td style="text-align: center;">
+                  <button type="button" class="host-row-btn" onclick="deleteHostItem(${idx})" title="Tanggalin ang Host">
+                    ✕
+                  </button>
+                </td>
+              </tr>
+            `).join('') : `
+              <tr>
+                <td colspan="8" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                  Walang nakitang host record. I-click ang "+ Add New Host" o "Reset" sa itaas.
+                </td>
+              </tr>
+            `}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close Host Portal</button>
+      </div>
+    </div>
+
+    <!-- Tab 2: Add New Host Form -->
+    <div id="hostTabAdd" style="display: ${activeTab === 'add' ? 'block' : 'none'};">
+      <form id="addNewHostForm" style="background: rgba(0,0,0,0.25); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; color: var(--accent-gold-light);">Mag-rehistro ng Bagong Host sa Talaan</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Ipasok ang mga detalye ng host para awtomatikong maisama sa official Host List.</p>
+        
         <div class="form-group-row">
           <div class="form-group">
-            <label class="form-label">Host Real Full Name *</label>
-            <input type="text" id="hostRealName" class="form-control" placeholder="e.g. Maria Santos" required value="${savedHost ? savedHost.realName : ''}">
+            <label class="form-label">ID Number *</label>
+            <input type="text" id="newHostIdNumber" class="form-control" placeholder="e.g. SIN-90823 o 8374921" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Live Streamer / Stage Name *</label>
-            <input type="text" id="hostStageName" class="form-control" placeholder="e.g. QueenMia_Live" required value="${savedHost ? savedHost.stageName : ''}">
+            <label class="form-label">ID Name *</label>
+            <input type="text" id="newHostIdName" class="form-control" placeholder="e.g. QueenMia_Live o StarHost99" required>
           </div>
         </div>
 
         <div class="form-group-row">
           <div class="form-group">
-            <label class="form-label">Primary Live App *</label>
-            <select id="hostApp" class="form-control" style="background: rgba(14,17,26,0.9);">
-              <option value="TikTok LIVE" ${savedHost && savedHost.app === 'TikTok LIVE' ? 'selected' : ''}>TikTok LIVE</option>
-              <option value="Bigo Live" ${savedHost && savedHost.app === 'Bigo Live' ? 'selected' : ''}>Bigo Live</option>
-              <option value="Poppo Live" ${savedHost && savedHost.app === 'Poppo Live' ? 'selected' : ''}>Poppo Live</option>
-              <option value="Likee" ${savedHost && savedHost.app === 'Likee' ? 'selected' : ''}>Likee</option>
-              <option value="Twitch" ${savedHost && savedHost.app === 'Twitch' ? 'selected' : ''}>Twitch</option>
-              <option value="Other App" ${savedHost && savedHost.app === 'Other App' ? 'selected' : ''}>Other App</option>
-            </select>
+            <label class="form-label">Valid Days *</label>
+            <input type="text" id="newHostValidDays" class="form-control" placeholder="e.g. 26 Days o 24" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Host User ID / Profile Link *</label>
-            <input type="text" id="hostId" class="form-control" placeholder="e.g. @queenmia99 / ID: 9384729" required value="${savedHost ? savedHost.hostId : ''}">
+            <label class="form-label">Live Time *</label>
+            <input type="text" id="newHostLiveTime" class="form-control" placeholder="e.g. 88.5 hrs o 120 hrs" required>
           </div>
         </div>
 
         <div class="form-group-row">
           <div class="form-group">
-            <label class="form-label">Monthly Target Diamonds *</label>
-            <select id="hostTargetDiamonds" class="form-control" style="background: rgba(14,17,26,0.9);">
-              <option value="500K" ${savedHost && savedHost.targetDiamonds === '500K' ? 'selected' : ''}>💎 500K Diamonds Milestone</option>
-              <option value="1M" ${savedHost && savedHost.targetDiamonds === '1M' ? 'selected' : ''}>💎 1M Diamonds Milestone</option>
-              <option value="2M" ${savedHost && savedHost.targetDiamonds === '2M' ? 'selected' : ''}>💎 2M Diamonds Milestone</option>
-              <option value="5M" ${savedHost && savedHost.targetDiamonds === '5M' ? 'selected' : ''}>💎 5M Diamonds Milestone</option>
-              <option value="10M" ${savedHost && savedHost.targetDiamonds === '10M' ? 'selected' : ''}>💎 10M Diamonds Milestone</option>
-              <option value="20M+" ${savedHost && savedHost.targetDiamonds === '20M+' ? 'selected' : ''}>💎 20M+ Elite Crown Diamond</option>
-            </select>
+            <label class="form-label">Gift Revenue *</label>
+            <input type="text" id="newHostGiftRevenue" class="form-control" placeholder="e.g. ₱94,500 o 1,500,000 Diamonds" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Daily Live Schedule *</label>
-            <input type="text" id="hostSchedule" class="form-control" placeholder="e.g. 7:00 PM – 11:00 PM Daily" required value="${savedHost ? savedHost.schedule : ''}">
+            <label class="form-label">Game Revenue *</label>
+            <input type="text" id="newHostGameRevenue" class="form-control" placeholder="e.g. ₱42,300 o 800,000 Coins" required>
           </div>
         </div>
 
-        <div class="form-group-row">
-          <div class="form-group">
-            <label class="form-label">Payout Method (GCash / Maya / Bank) *</label>
-            <input type="text" id="hostPayoutAccount" class="form-control" placeholder="e.g. GCash 0917-123-4567" required value="${savedHost ? savedHost.payoutAccount : ''}">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Contact Mobile / WhatsApp *</label>
-            <input type="text" id="hostContact" class="form-control" placeholder="e.g. +63 917 123 4567" required value="${savedHost ? savedHost.contact : ''}">
-          </div>
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label class="form-label">Live Streaming Platform</label>
+          <select id="newHostApp" class="form-control" style="background: rgba(14,17,26,0.9);">
+            <option value="TikTok LIVE">TikTok LIVE</option>
+            <option value="Bigo Live">Bigo Live</option>
+            <option value="Poppo Live">Poppo Live</option>
+            <option value="Likee">Likee</option>
+            <option value="Twitch">Twitch</option>
+            <option value="Other App">Other App</option>
+          </select>
         </div>
 
-        <div style="display: flex; gap: 14px; margin-top: 10px;">
-          <button type="submit" class="btn btn-primary" style="flex: 1; padding: 16px;">
-            <span>Save & Register Host Details</span>
+        <div style="display: flex; gap: 12px;">
+          <button type="submit" class="btn btn-primary" style="flex: 1; padding: 14px;">
+            <span>I-save sa Host List</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
-          <button type="button" class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
+          <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Bumalik sa Host List</button>
         </div>
       </form>
     </div>
 
-    <!-- Tab 2: Host Status Card -->
-    <div id="hostTabDashboard" style="display: ${activeTab === 'dashboard' ? 'block' : 'none'};">
-      ${savedHost ? `
-        <div style="background: rgba(212,175,55,0.08); border: 2px solid var(--accent-gold); border-radius: var(--radius-lg); padding: 32px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); position: relative;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
-            <div style="display: flex; align-items: center; gap: 14px;">
-              <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #000;">👑</div>
-              <div>
-                <h3 style="font-size: 1.4rem; font-weight: 800;">${savedHost.stageName}</h3>
-                <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">${savedHost.realName} • ID: ${savedHost.hostId}</div>
-              </div>
-            </div>
-            <span class="badge" style="margin-bottom: 0; background: rgba(39,201,63,0.15); color: #27c93f; border-color: #27c93f;">● ACTIVE SINDIKATO HOST</span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Streaming Platform</div>
-              <div style="font-weight: 800; color: var(--accent-gold-light); font-size: 1.05rem;">${savedHost.app}</div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Monthly Diamond Target</div>
-              <div style="font-weight: 800; color: var(--accent-gold-bright); font-size: 1.05rem;">💎 ${savedHost.targetDiamonds}</div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Live Schedule</div>
-              <div style="font-weight: 700; font-size: 0.95rem;">${savedHost.schedule}</div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Registered Payout Account</div>
-              <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent-gold-light);">${savedHost.payoutAccount}</div>
-            </div>
-          </div>
-
-          <div style="background: rgba(0,0,0,0.4); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 24px;">
-            <div class="flex-between" style="margin-bottom: 8px;">
-              <span style="font-size: 0.85rem; font-weight: 700;">Diamond Milestone Target Progress</span>
-              <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-gold-bright);">Goal: ${savedHost.targetDiamonds}</span>
-            </div>
-            <div style="width: 100%; height: 10px; border-radius: 5px; background: rgba(255,255,255,0.1); overflow: hidden;">
-              <div style="width: 75%; height: 100%; background: var(--gold-gradient); border-radius: 5px;"></div>
-            </div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
-              Host Tier Level: Gold Syndicate Streamer • Target Verified by Agency Manager
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <button class="btn btn-primary" onclick="renderHostPortalModal('form')">Edit Details</button>
-            <button class="btn btn-secondary" onclick="alert('Host Details copied to clipboard!');">Copy Host Card</button>
-            <button class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
-          </div>
-        </div>
-      ` : `
-        <div style="text-align: center; padding: 40px 20px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-          <div style="font-size: 3rem; margin-bottom: 12px;">📝</div>
-          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">Wala pang naka-save na Host Details</h3>
-          <p style="color: var(--text-secondary); max-width: 460px; margin: 0 auto 20px auto; font-size: 0.9rem;">
-            Punan ang Form sa Tab 1 para ma-save ang iyong opisyal na streamer profile sa Sindikato Agency vault.
-          </p>
-          <button class="btn btn-primary" onclick="renderHostPortalModal('form')">Pumunta sa Registration Form</button>
-        </div>
-      `}
-    </div>
-
-    <!-- Tab 3: Rules & Milestones -->
+    <!-- Tab 3: Guidelines & Milestones -->
     <div id="hostTabRules" style="display: ${activeTab === 'rules' ? 'block' : 'none'};">
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-          <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💎 Diamond Payout Schedule</h4>
+          <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💎 Revenue Payout Schedule & Validity</h4>
           <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
-            Lahat ng official host diamond milestones ay computed monthly. Ang cash payouts at agency rewards ay inire-release tuwing <strong>5th at 20th ng bawat buwan</strong> diretso sa iyong registered GCash/Bank account.
+            Lahat ng official Gift Revenue at Game Revenue ay computed monthly base sa inyong total <strong>Valid Days</strong> at <strong>Live Time</strong>. Ang payouts ay inire-release tuwing <strong>5th at 20th ng bawat buwan</strong> diretso sa inyong GCash/Bank account.
           </p>
         </div>
 
         <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-          <h4 style="font-weight: 800; margin-bottom: 8px;">🛡️ Agency Streaming Ethics & Guidelines</h4>
+          <h4 style="font-weight: 800; margin-bottom: 8px;">🛡️ Agency Streaming Standards</h4>
           <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-secondary);">
-            <li>✓ Minimum of 2 to 4 streaming hours daily para sa active milestone validity.</li>
-            <li>✓ Sumunod sa community standards ng iyong host platform (TikTok, Bigo, Poppo).</li>
-            <li>✓ <strong>LOYALTY • DISCIPLINE • RESPECT</strong> — Panatilihin ang professional agency representation sa live PK battles at events.</li>
+            <li>✓ Minimum of 22 to 26 Valid Days buwan-buwan para ma-qualify sa full agency bonuses.</li>
+            <li>✓ Minimum of 60 to 120 Live Streaming Hours para sa elite syndicate tier standing.</li>
+            <li>✓ <strong>LOYALTY • DISCIPLINE • RESPECT</strong> — Panatilihin ang professional agency representation sa lahat ng live broadcasts.</li>
           </ul>
         </div>
 
         <div class="sindikato-motto-ribbon">
           LOYALTY • DISCIPLINE • RESPECT — WE ARE THE SINDIKATO
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Bumalik sa Host List</button>
         </div>
       </div>
     </div>
@@ -1058,26 +1187,27 @@ function renderHostPortalModal(activeTab = 'form') {
   modalBackdrop.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Attach form submit listener
-  const form = document.getElementById('hostDetailsForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
+  // Attach Add Host Form submit handler
+  const addForm = document.getElementById('addNewHostForm');
+  if (addForm) {
+    addForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const hostData = {
-        realName: document.getElementById('hostRealName').value.trim(),
-        stageName: document.getElementById('hostStageName').value.trim(),
-        app: document.getElementById('hostApp').value,
-        hostId: document.getElementById('hostId').value.trim(),
-        targetDiamonds: document.getElementById('hostTargetDiamonds').value,
-        schedule: document.getElementById('hostSchedule').value.trim(),
-        payoutAccount: document.getElementById('hostPayoutAccount').value.trim(),
-        contact: document.getElementById('hostContact').value.trim(),
-        savedAt: new Date().toLocaleDateString()
+      const newHost = {
+        idNumber: document.getElementById('newHostIdNumber').value.trim(),
+        idName: document.getElementById('newHostIdName').value.trim(),
+        validDays: document.getElementById('newHostValidDays').value.trim(),
+        liveTime: document.getElementById('newHostLiveTime').value.trim(),
+        giftRevenue: document.getElementById('newHostGiftRevenue').value.trim(),
+        gameRevenue: document.getElementById('newHostGameRevenue').value.trim(),
+        app: document.getElementById('newHostApp').value
       };
 
-      localStorage.setItem('sindikato_host_profile', JSON.stringify(hostData));
-      showToast(`Host profile ni ${hostData.stageName} ay matagumpay na nai-save!`);
-      renderHostPortalModal('dashboard');
+      const list = getHostList();
+      list.unshift(newHost);
+      saveHostList(list);
+
+      showToast(`Host ${newHost.idName} (${newHost.idNumber}) matagumpay na naidagdag sa Host List!`);
+      renderHostPortalModal('list');
     });
   }
 }
