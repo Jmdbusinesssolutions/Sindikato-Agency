@@ -877,9 +877,11 @@ const HOST_LIST = [
   { idNumber: 'SIN-65482', idName: 'SweetAngel_PH', validDays: '28 Days', liveTime: '115.0 hrs', giftRevenue: '₱210,000', gameRevenue: '₱95,400', app: 'Poppo Live' },
   { idNumber: 'SIN-99120', idName: 'ShadowDJ_Live', validDays: '22 Days', liveTime: '64.5 hrs', giftRevenue: '₱76,800', gameRevenue: '₱31,200', app: 'TikTok LIVE' },
   { idNumber: 'SIN-54211', idName: 'Bella_Vibe', validDays: '25 Days', liveTime: '80.0 hrs', giftRevenue: '₱118,600', gameRevenue: '₱54,000', app: 'Bigo Live' },
-  { idNumber: 'SIN-43109', idName: 'PrinceRaven', validDays: '21 Days', liveTime: '58.5 hrs', giftRevenue: '₱62,400', gameRevenue: '₱28,700', app: 'Poppo Live' }
-  // Mag-dagdag lamang ng bagong host dito:
-  // { idNumber: 'SIN-XXXXX', idName: 'Host_Name', validDays: '25 Days', liveTime: '80 hrs', giftRevenue: '₱50,000', gameRevenue: '₱25,000', app: 'TikTok LIVE' },
+  { idNumber: 'SIN-43109', idName: 'PrinceRaven', validDays: '21 Days', liveTime: '58.5 hrs', giftRevenue: '₱62,400', gameRevenue: '₱28,700', app: 'Poppo Live' },
+  { idNumber: 'SIN-31980', idName: 'LadyCassandra', validDays: '27 Days', liveTime: '102.0 hrs', giftRevenue: '₱180,500', gameRevenue: '₱84,200', app: 'TikTok LIVE' },
+  { idNumber: 'SIN-22451', idName: 'ViperKing_PK', validDays: '23 Days', liveTime: '76.0 hrs', giftRevenue: '₱132,000', gameRevenue: '₱59,800', app: 'Bigo Live' },
+  { idNumber: 'SIN-19874', idName: 'PrincessChloe', validDays: '25 Days', liveTime: '91.5 hrs', giftRevenue: '₱155,800', gameRevenue: '₱71,300', app: 'Poppo Live' },
+  { idNumber: 'SIN-67230', idName: 'NeonKnight_Live', validDays: '21 Days', liveTime: '60.0 hrs', giftRevenue: '₱70,200', gameRevenue: '₱33,500', app: 'TikTok LIVE' }
 ];
 
 let activeHostList = [...HOST_LIST];

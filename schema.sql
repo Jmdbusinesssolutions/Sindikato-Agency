@@ -1,6 +1,6 @@
 -- =========================================================================
 -- SINDIKATO AGENCY — CLOUDFLARE D1 DATABASE SCHEMA
--- Database Name: sindikato_hosts_db
+-- Database Name: host-portal
 -- =========================================================================
 
 -- 1. Create Hosts Table
@@ -25,11 +25,15 @@ CREATE INDEX IF NOT EXISTS idx_hosts_id_number ON hosts(id_number);
 CREATE INDEX IF NOT EXISTS idx_hosts_id_name ON hosts(id_name);
 CREATE INDEX IF NOT EXISTS idx_hosts_status ON hosts(status);
 
--- 3. Initial Seed Data (Sindikato Official Host Roster)
-INSERT OR IGNORE INTO hosts (id_number, id_name, valid_days, live_time, gift_revenue, game_revenue, app, status) VALUES
+-- 3. Initial Sample Seed Data (Sindikato Official Host Roster)
+INSERT OR REPLACE INTO hosts (id_number, id_name, valid_days, live_time, gift_revenue, game_revenue, app, status) VALUES
 ('SIN-88201', 'QueenMia_Live', '26 Days', '88.5 hrs', '₱94,500', '₱42,300', 'TikTok LIVE', 'Active'),
 ('SIN-77319', 'Boss_King99', '24 Days', '72.0 hrs', '₱145,200', '₱68,900', 'Bigo Live', 'Active'),
 ('SIN-65482', 'SweetAngel_PH', '28 Days', '115.0 hrs', '₱210,000', '₱95,400', 'Poppo Live', 'Active'),
 ('SIN-99120', 'ShadowDJ_Live', '22 Days', '64.5 hrs', '₱76,800', '₱31,200', 'TikTok LIVE', 'Active'),
 ('SIN-54211', 'Bella_Vibe', '25 Days', '80.0 hrs', '₱118,600', '₱54,000', 'Bigo Live', 'Active'),
-('SIN-43109', 'PrinceRaven', '21 Days', '58.5 hrs', '₱62,400', '₱28,700', 'Poppo Live', 'Active');
+('SIN-43109', 'PrinceRaven', '21 Days', '58.5 hrs', '₱62,400', '₱28,700', 'Poppo Live', 'Active'),
+('SIN-31980', 'LadyCassandra', '27 Days', '102.0 hrs', '₱180,500', '₱84,200', 'TikTok LIVE', 'Active'),
+('SIN-22451', 'ViperKing_PK', '23 Days', '76.0 hrs', '₱132,000', '₱59,800', 'Bigo Live', 'Active'),
+('SIN-19874', 'PrincessChloe', '25 Days', '91.5 hrs', '₱155,800', '₱71,300', 'Poppo Live', 'Active'),
+('SIN-67230', 'NeonKnight_Live', '21 Days', '60.0 hrs', '₱70,200', '₱33,500', 'TikTok LIVE', 'Active');
