@@ -6,9 +6,8 @@ compatibility_date = "2026-08-27"
 directory = "."
 
 # Cloudflare D1 Database Binding
-# Kapag nagawa mo na ang D1 database sa Cloudflare Dashboard, i-uncomment at i-paste ang iyong Database ID:
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "sindikato_hosts_db"
-# database_id = "ILAGAY_DITO_ANG_DATABASE_ID"
-# migrations_dir = "migrations"
+[[d1_databases]]
+binding = "DB"
+database_name = "host-portal"
+database_id = "e57b5e47-b389-45f3-84cf-41672d5eb238"
+migrations_dir = "migrations"
