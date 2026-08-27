@@ -1,0 +1,10 @@
+name = "sindikato-agency"
+compatibility_date = "2026-08-27"
+pages_build_output_dir = "."
+
+# Cloudflare D1 Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "sindikato_hosts_db"
+database_id = "sindikato_hosts_db" # Palitan ito ng iyong aktwal na D1 Database ID mula sa Cloudflare Dashboard
+migrations_dir = "migrations"

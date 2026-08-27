@@ -882,9 +882,38 @@ const HOST_LIST = [
   // { idNumber: 'SIN-XXXXX', idName: 'Host_Name', validDays: '25 Days', liveTime: '80 hrs', giftRevenue: '₱50,000', gameRevenue: '₱25,000', app: 'TikTok LIVE' },
 ];
 
+let activeHostList = [...HOST_LIST];
+
+async function syncWithD1Database() {
+  try {
+    const res = await fetch('/api/hosts');
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        activeHostList = json.data.map(item => ({
+          idNumber: item.id_number,
+          idName: item.id_name,
+          validDays: item.valid_days,
+          liveTime: item.live_time,
+          giftRevenue: item.gift_revenue,
+          gameRevenue: item.game_revenue,
+          app: item.app || 'Live'
+        }));
+        // Refresh table if modal is currently open
+        const modalBackdrop = document.getElementById('caseStudyModal');
+        if (modalBackdrop && modalBackdrop.classList.contains('open')) {
+          renderHostPortalModal('list');
+        }
+      }
+    }
+  } catch (e) {
+    // Offline or static preview fallback
+  }
+}
+
 window.copyHostList = function() {
   let text = '=== SINDIKATO AGENCY OFFICIAL HOST LIST ===\n\n';
-  HOST_LIST.forEach((h, i) => {
+  activeHostList.forEach((h, i) => {
     text += `${i + 1}. ID: ${h.idNumber} | Name: ${h.idName} | Valid Days: ${h.validDays} | Live Time: ${h.liveTime} | Gift Rev: ${h.giftRevenue} | Game Rev: ${h.gameRevenue} (${h.app || 'Live'})\n`;
   });
   navigator.clipboard.writeText(text).then(() => {
@@ -913,7 +942,10 @@ function renderHostPortalModal(activeTab = 'list') {
   const modalBody = document.getElementById('modalContentBody');
   if (!modalBackdrop || !modalBody) return;
 
-  const totalHosts = HOST_LIST.length;
+  // Trigger background D1 sync
+  syncWithD1Database();
+
+  const totalHosts = activeHostList.length;
 
   modalBody.innerHTML = `
     <div style="margin-bottom: 20px;">
