@@ -120,6 +120,25 @@
 }
 
 @media (max-width: 768px) {
+  .hero-cover-wrapper {
+    margin-bottom: 20px;
+  }
+  
+  .hero-cover-banner {
+    border-radius: var(--radius-md);
+    aspect-ratio: 16 / 8.5;
+  }
+  
+  .hero-brand-emblem {
+    width: 96px;
+    height: 96px;
+    margin: -48px auto 18px auto;
+  }
+  
+  .hero-brand-emblem img {
+    border-width: 3px;
+  }
+
   .hero-headline {
     font-size: 2.6rem;
   }
