@@ -8,10 +8,99 @@ html, body {
   overflow-x: hidden;
 }
 
-/* --- Large Desktops & Tablets Landscape (max-width: 1200px) --- */
-@media (max-width: 1200px) {
+/* ==========================================================================
+   DESKTOP / PC MODE (min-width: 993px)
+   ========================================================================== */
+@media (min-width: 993px) {
+  .mobile-menu-btn {
+    display: none !important;
+  }
+
+  .mobile-only-cta {
+    display: none !important;
+  }
+
+  .desktop-only {
+    display: inline-flex !important;
+  }
+
+  .main-nav {
+    display: flex !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 0 !important;
+    gap: 28px !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  .main-nav .nav-link {
+    background: transparent !important;
+    border: none !important;
+    padding: 8px 0 !important;
+    font-size: 0.92rem !important;
+    width: auto !important;
+  }
+
+  .commission-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1.3fr !important;
+    gap: 50px !important;
+    align-items: center !important;
+  }
+
+  .tiers-table-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .portals-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 32px !important;
+  }
+
+  .portfolio-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 36px !important;
+  }
+
+  .project-media-wrap {
+    height: 380px !important;
+  }
+
+  .estimator-container {
+    display: grid !important;
+    grid-template-columns: 1.4fr 1fr !important;
+    gap: 40px !important;
+  }
+
+  .estimator-options-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+  }
+
+  .hero-cover-banner {
+    aspect-ratio: 21 / 9 !important;
+  }
+
   .hero-stats-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* --- Large Desktops & Tablets Landscape (max-width: 1200px) --- */
+@media (max-width: 1200px) and (min-width: 993px) {
+  .hero-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 32px;
   }
   
