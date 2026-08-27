@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPortfolioFilters();
   initCaseStudyModals();
   initProjectEstimator();
+  initHostRecruitment();
   initFaqAccordion();
   initTestimonialSlider();
   initOfficeClocks();
@@ -735,22 +736,93 @@ function initContactForm() {
   });
 }
 
-function showToast(message, type = 'success') {
-  let toast = document.getElementById('toastNotification');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toastNotification';
-    toast.className = 'toast-notification';
-    document.body.appendChild(toast);
+/* --------------------------------------------------------------------------
+   15. HOST RECRUITMENT & COMMISSION ENGINE
+   -------------------------------------------------------------------------- */
+function initHostRecruitment() {
+  const hostSlider = document.getElementById('recruitHostCountSlider');
+  const diamondSelect = document.getElementById('recruitDiamondSelect');
+  const hostCountDisplay = document.getElementById('recruitHostCountDisplay');
+  const earningsDisplay = document.getElementById('recruitEarningsDisplay');
+  const posterWrap = document.getElementById('commissionPosterWrap');
+  const applyBtn = document.getElementById('applyRecruiterBtn');
+
+  const diamondTiers = {
+    '500k': 150,
+    '1m': 500,
+    '2m': 700,
+    '3m': 1000,
+    '4m': 1300,
+    '5m': 1500,
+    '10m': 2000,
+    '15m': 2500,
+    '20m': 5000
+  };
+
+  function updateRecruiterEarnings() {
+    if (!hostSlider || !diamondSelect || !earningsDisplay) return;
+    const count = parseInt(hostSlider.value, 10);
+    const tierKey = diamondSelect.value;
+    const ratePerHost = diamondTiers[tierKey] || 500;
+    const total = count * ratePerHost;
+
+    if (hostCountDisplay) {
+      hostCountDisplay.textContent = `${count} ${count === 1 ? 'Active Host' : 'Active Hosts'}`;
+    }
+    earningsDisplay.textContent = `₱${total.toLocaleString()}`;
   }
 
-  toast.innerHTML = `
-    <div style="width: 10px; height: 10px; border-radius: 50%; background: ${type === 'error' ? '#ff3366' : 'var(--accent-lime)'};"></div>
-    <div style="font-size: 0.9rem; font-weight: 600;">${message}</div>
-  `;
+  if (hostSlider) {
+    hostSlider.addEventListener('input', updateRecruiterEarnings);
+  }
 
-  toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 4500);
+  if (diamondSelect) {
+    diamondSelect.addEventListener('change', updateRecruiterEarnings);
+  }
+
+  updateRecruiterEarnings();
+
+  // Poster Lightbox Zoom Modal
+  if (posterWrap) {
+    posterWrap.addEventListener('click', () => {
+      const modalBackdrop = document.getElementById('caseStudyModal');
+      const modalBody = document.getElementById('modalContentBody');
+      if (!modalBackdrop || !modalBody) return;
+
+      modalBody.innerHTML = `
+        <div style="text-align: center;">
+          <span class="badge">OFFICIAL COMMISSION SCHEDULE</span>
+          <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; margin-bottom: 20px; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Sindikato Host Recruitment Commission</h2>
+          <div style="max-width: 600px; margin: 0 auto 24px auto; border-radius: var(--radius-md); overflow: hidden; border: 2px solid var(--accent-gold); box-shadow: 0 10px 40px rgba(0,0,0,0.8);">
+            <img src="assets/images/sindikato-commission.jpg" alt="Sindikato Commission Full Poster" style="width: 100%; height: auto; display: block;">
+          </div>
+          <div class="sindikato-motto-ribbon" style="margin-bottom: 24px;">
+            LOYALTY • DISCIPLINE • RESPECT — WE ARE THE SINDIKATO
+          </div>
+          <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+            <a href="#contact" class="btn btn-primary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Apply as Host / Recruiter</a>
+            <button class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close Image</button>
+          </div>
+        </div>
+      `;
+
+      modalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  if (applyBtn) {
+    applyBtn.addEventListener('click', () => {
+      const messageField = document.getElementById('contactMessage');
+      if (messageField) {
+        messageField.value = `[HOST RECRUITMENT APPLICATION]\nI would like to apply as a Host / Recruiter for Sindikato Agency.\n\nMy streaming background / recruitment goals:\n- Target Hosts / Diamond Goals: \n- Prior Agency Experience: \n- Contact Number: `;
+      }
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+      showToast('Recruiter application transferred to contact form!');
+    });
+  }
 }
+

@@ -1911,3 +1911,179 @@ body.cursor-hover .custom-cursor-follower {
   transform: translate(-50%, -50%) scale(1.6);
   border-color: var(--accent-gold-bright);
 }
+
+/* ==========================================================================
+   HOST RECRUITMENT & COMMISSION SECTION
+   ========================================================================== */
+.commission-section {
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.commission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.commission-poster-wrap {
+  position: relative;
+  border-radius: var(--radius-lg);
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(18, 22, 32, 0.9) 50%, rgba(212, 175, 55, 0.3) 100%);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px var(--accent-gold-glow);
+  cursor: pointer;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.commission-poster-wrap:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(255, 215, 0, 0.5);
+}
+
+.commission-poster-img {
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--radius-lg) - 4px);
+  display: block;
+  object-fit: cover;
+}
+
+.poster-zoom-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(6, 7, 10, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold-bright);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.commission-content-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.tiers-table-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.tier-item-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  text-align: center;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.tier-item-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-3px);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.tier-diamonds {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tier-reward {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--accent-gold-bright);
+}
+
+/* Dynamic Recruiter Calculator Box */
+.recruiter-calc-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+
+.calc-slider-wrap {
+  margin: 16px 0;
+}
+
+.calc-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gold-gradient);
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--accent-gold-bright);
+}
+
+.calc-result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.calc-result-amount {
+  font-size: 1.6rem;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Sindikato Motto Ribbon */
+.sindikato-motto-ribbon {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.25) 50%, rgba(212, 175, 55, 0.1) 100%);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent-gold-light);
+  text-transform: uppercase;
+}
+
