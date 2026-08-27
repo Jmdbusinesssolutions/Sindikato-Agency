@@ -1,9 +1,0 @@
-{
-  "name": "sindikato-agency",
-  "version": "1.0.0",
-  "description": "Sindikato Agency Web App",
-  "scripts": {
-    "build": "echo 'Build complete'",
-    "deploy": "wrangler pages deploy ."
-  }
-}
