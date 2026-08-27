@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initOfficeClocks();
   initQuickBrief();
   initContactForm();
+  initAdminNavigation();
 });
 
 /* --------------------------------------------------------------------------
@@ -868,9 +869,11 @@ function initHostRecruitment() {
 
 // --------------------------------------------------------------------------
 // =========================================================================
-// OFFICIAL SINDIKATO HOST LIST (DIRECT CODE CONFIGURATION)
-// Dito mo maaaring i-add, i-edit, o tanggalin ang mga Host Streamers:
+// MASTER ADMIN & OFFICIAL SINDIKATO HOST LIST
 // =========================================================================
+const MASTER_ADMIN_EMAIL = "joemardaguio1027@gmail.com";
+const MASTER_ADMIN_PASS = "pogiako123@";
+
 const HOST_LIST = [
   { idNumber: 'SIN-88201', idName: 'QueenMia_Live', validDays: '26 Days', liveTime: '88.5 hrs', giftRevenue: '₱94,500', gameRevenue: '₱42,300', app: 'TikTok LIVE' },
   { idNumber: 'SIN-77319', idName: 'Boss_King99', validDays: '24 Days', liveTime: '72.0 hrs', giftRevenue: '₱145,200', gameRevenue: '₱68,900', app: 'Bigo Live' },
@@ -886,6 +889,73 @@ const HOST_LIST = [
 
 let activeHostList = [...HOST_LIST];
 
+// --------------------------------------------------------------------------
+// ADMIN AUTHENTICATION UTILITIES
+// --------------------------------------------------------------------------
+function isAdminLoggedIn() {
+  try {
+    const session = JSON.parse(localStorage.getItem('sindikato_admin_session') || 'null');
+    return session && session.loggedIn && session.email.toLowerCase() === MASTER_ADMIN_EMAIL.toLowerCase();
+  } catch (e) {
+    return false;
+  }
+}
+
+window.logoutAdmin = function() {
+  if (confirm('Sigurado ka bang nais mong mag-logout bilang Master Admin?')) {
+    localStorage.removeItem('sindikato_admin_session');
+    showToast('Naka-logout na mula sa Master Admin mode.');
+    initAdminNavigation();
+    const modalBackdrop = document.getElementById('caseStudyModal');
+    if (modalBackdrop && modalBackdrop.classList.contains('open')) {
+      renderHostPortalModal('list');
+    }
+  }
+};
+
+function initAdminNavigation() {
+  const navBtn = document.getElementById('navAdminBtn');
+  const mobileNavBtn = document.getElementById('mobileNavAdminBtn');
+  const loggedIn = isAdminLoggedIn();
+
+  if (navBtn) {
+    if (loggedIn) {
+      navBtn.innerHTML = `<span>👑 Master Admin</span>`;
+      navBtn.style.background = 'rgba(212,175,55,0.25)';
+      navBtn.style.borderColor = 'var(--accent-gold)';
+      navBtn.href = '#';
+      navBtn.onclick = (e) => {
+        e.preventDefault();
+        renderHostPortalModal('list');
+      };
+    } else {
+      navBtn.innerHTML = `<span>🔐 Admin Login</span>`;
+      navBtn.style.background = '';
+      navBtn.style.borderColor = '';
+      navBtn.href = 'login.html';
+      navBtn.onclick = null;
+    }
+  }
+
+  if (mobileNavBtn) {
+    if (loggedIn) {
+      mobileNavBtn.textContent = '👑 Master Admin Panel';
+      mobileNavBtn.href = '#';
+      mobileNavBtn.onclick = (e) => {
+        e.preventDefault();
+        renderHostPortalModal('list');
+      };
+    } else {
+      mobileNavBtn.textContent = '🔐 Admin Portal';
+      mobileNavBtn.href = 'login.html';
+      mobileNavBtn.onclick = null;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// CLOUDFLARE D1 SYNC
+// --------------------------------------------------------------------------
 async function syncWithD1Database() {
   try {
     const res = await fetch('/api/hosts');
@@ -901,17 +971,59 @@ async function syncWithD1Database() {
           gameRevenue: item.game_revenue,
           app: item.app || 'Live'
         }));
-        // Refresh table if modal is currently open
         const modalBackdrop = document.getElementById('caseStudyModal');
         if (modalBackdrop && modalBackdrop.classList.contains('open')) {
           renderHostPortalModal('list');
         }
       }
     }
-  } catch (e) {
-    // Offline or static preview fallback
-  }
+  } catch (e) {}
 }
+
+async function saveHostToCloud(host) {
+  try {
+    await fetch('/api/hosts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id_number: host.idNumber,
+        id_name: host.idName,
+        valid_days: host.validDays,
+        live_time: host.liveTime,
+        gift_revenue: host.giftRevenue,
+        game_revenue: host.gameRevenue,
+        app: host.app,
+        status: 'Active'
+      })
+    });
+  } catch (e) {}
+}
+
+async function deleteHostFromCloud(idNumber) {
+  try {
+    await fetch('/api/hosts', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_number: idNumber })
+    });
+  } catch (e) {}
+}
+
+window.deleteHostItem = function(index) {
+  if (!isAdminLoggedIn()) {
+    alert('Kailangan mong mag-login bilang Master Admin bago mag-alis ng host.');
+    window.location.href = 'login.html';
+    return;
+  }
+  const host = activeHostList[index];
+  if (confirm(`Sigurado ka bang nais mong tanggalin si ${host.idName} (${host.idNumber}) sa Host List?`)) {
+    const idToDelete = host.idNumber;
+    activeHostList.splice(index, 1);
+    deleteHostFromCloud(idToDelete);
+    showToast(`Host ${host.idName} matagumpay na natanggal!`);
+    renderHostPortalModal('list');
+  }
+};
 
 window.copyHostList = function() {
   let text = '=== SINDIKATO AGENCY OFFICIAL HOST LIST ===\n\n';
@@ -944,13 +1056,13 @@ function renderHostPortalModal(activeTab = 'list') {
   const modalBody = document.getElementById('modalContentBody');
   if (!modalBackdrop || !modalBody) return;
 
-  // Trigger background D1 sync
   syncWithD1Database();
 
   const totalHosts = activeHostList.length;
+  const adminActive = isAdminLoggedIn();
 
   modalBody.innerHTML = `
-    <div style="margin-bottom: 20px;">
+    <div style="margin-bottom: 18px;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
         <span class="badge" style="margin-bottom: 0;">👑 OFFICIAL HOST PORTAL</span>
         <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">SINDIKATO STREAMER VAULT</span>
@@ -959,10 +1071,45 @@ function renderHostPortalModal(activeTab = 'list') {
       <p style="color: var(--text-secondary); font-size: 0.92rem;">Subaybayan ang real-time records ng mga host: ID number, ID name, Valid days, Live time, Gift Revenue, at Game Revenue.</p>
     </div>
 
+    <!-- Admin Status Banner -->
+    ${adminActive ? `
+      <div style="background: rgba(212,175,55,0.12); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 12px 18px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 0 20px rgba(212,175,55,0.15);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.3rem;">👑</span>
+          <div>
+            <div style="font-weight: 800; color: var(--accent-gold-bright); font-size: 0.88rem; letter-spacing: 0.04em;">MASTER ADMIN MODE ACTIVE</div>
+            <div style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);">${MASTER_ADMIN_EMAIL}</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-primary btn-pill" style="padding: 6px 14px; font-size: 0.76rem;" onclick="renderHostPortalModal('add')">
+            <span>➕ Add Host</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-pill" style="padding: 6px 12px; font-size: 0.76rem;" onclick="logoutAdmin()">
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    ` : `
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+        <div style="font-size: 0.8rem; color: var(--text-muted);">
+          👁️ Viewing Mode (Read-Only). Mag-login bilang Admin para makapag-add o tanggal ng host.
+        </div>
+        <a href="login.html" class="btn btn-secondary btn-pill" style="padding: 5px 12px; font-size: 0.76rem;">
+          <span>🔐 Admin Login</span>
+        </a>
+      </div>
+    `}
+
     <!-- Portal Navigation Tabs -->
     <div class="portal-tabs-nav">
       <button class="portal-tab-button ${activeTab === 'list' ? 'active' : ''}" onclick="renderHostPortalModal('list')">1. 📋 Official Host List (${totalHosts})</button>
-      <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">2. 💎 Guidelines & Milestones</button>
+      ${adminActive ? `
+        <button class="portal-tab-button ${activeTab === 'add' ? 'active' : ''}" onclick="renderHostPortalModal('add')">2. ➕ Add New Host</button>
+        <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">3. 💎 Guidelines & Milestones</button>
+      ` : `
+        <button class="portal-tab-button ${activeTab === 'rules' ? 'active' : ''}" onclick="renderHostPortalModal('rules')">2. 💎 Guidelines & Milestones</button>
+      `}
     </div>
 
     <!-- Tab 1: Host List Table -->
@@ -1005,6 +1152,11 @@ function renderHostPortalModal(activeTab = 'list') {
           >
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          ${adminActive ? `
+            <button type="button" class="btn btn-primary btn-pill" style="padding: 9px 14px; font-size: 0.82rem;" onclick="renderHostPortalModal('add')">
+              <span>+ Add Host</span>
+            </button>
+          ` : ''}
           <button type="button" class="btn btn-secondary btn-pill" style="padding: 9px 16px; font-size: 0.82rem;" onclick="copyHostList()">
             <span>Copy Roster</span>
           </button>
@@ -1023,10 +1175,11 @@ function renderHostPortalModal(activeTab = 'list') {
               <th>Live Time</th>
               <th>Gift Revenue</th>
               <th>Game Revenue</th>
+              ${adminActive ? `<th style="text-align: center;">Action</th>` : ''}
             </tr>
           </thead>
           <tbody id="hostListTableBody">
-            ${HOST_LIST.length > 0 ? HOST_LIST.map((host, idx) => `
+            ${activeHostList.length > 0 ? activeHostList.map((host, idx) => `
               <tr>
                 <td style="font-family: var(--font-mono); color: var(--text-muted);">${idx + 1}</td>
                 <td>
@@ -1060,11 +1213,18 @@ function renderHostPortalModal(activeTab = 'list') {
                     🎮 ${host.gameRevenue}
                   </div>
                 </td>
+                ${adminActive ? `
+                  <td style="text-align: center;">
+                    <button type="button" class="host-row-btn" onclick="deleteHostItem(${idx})" title="Tanggalin ang Host">
+                      ✕
+                    </button>
+                  </td>
+                ` : ''}
               </tr>
             `).join('') : `
               <tr>
-                <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
-                  Walang nakitang host record sa HOST_LIST.
+                <td colspan="${adminActive ? 8 : 7}" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                  Walang nakitang host record sa talaan.
                 </td>
               </tr>
             `}
@@ -1077,7 +1237,73 @@ function renderHostPortalModal(activeTab = 'list') {
       </div>
     </div>
 
-    <!-- Tab 2: Guidelines & Milestones -->
+    <!-- Tab 2: Admin Add New Host Form (Only if admin) -->
+    ${adminActive ? `
+      <div id="hostTabAdd" style="display: ${activeTab === 'add' ? 'block' : 'none'};">
+        <form id="adminAddNewHostForm" style="background: rgba(0,0,0,0.25); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--accent-gold-light);">Mag-rehistro ng Bagong Host (Admin Access)</h3>
+            <span class="badge" style="margin-bottom: 0;">👑 MASTER ADMIN</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Ipasok ang mga detalye ng host para awtomatikong mai-save sa Cloudflare D1 Database at Host List.</p>
+          
+          <div class="form-group-row">
+            <div class="form-group">
+              <label class="form-label">ID Number *</label>
+              <input type="text" id="adminHostIdNumber" class="form-control" placeholder="e.g. SIN-90823 o 8374921" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">ID Name / Stage Name *</label>
+              <input type="text" id="adminHostIdName" class="form-control" placeholder="e.g. QueenMia_Live o StarHost99" required>
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-group">
+              <label class="form-label">Valid Days * (Target: 21 Days)</label>
+              <input type="text" id="adminHostValidDays" class="form-control" placeholder="e.g. 26 Days o 21 Days" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Live Time *</label>
+              <input type="text" id="adminHostLiveTime" class="form-control" placeholder="e.g. 88.5 hrs o 120 hrs" required>
+            </div>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-group">
+              <label class="form-label">Gift Revenue *</label>
+              <input type="text" id="adminHostGiftRevenue" class="form-control" placeholder="e.g. ₱94,500 o 1,500,000 Diamonds" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Game Revenue *</label>
+              <input type="text" id="adminHostGameRevenue" class="form-control" placeholder="e.g. ₱42,300 o 800,000 Coins" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">Live Streaming Platform</label>
+            <select id="adminHostApp" class="form-control" style="background: rgba(14,17,26,0.9);">
+              <option value="TikTok LIVE">TikTok LIVE</option>
+              <option value="Bigo Live">Bigo Live</option>
+              <option value="Poppo Live">Poppo Live</option>
+              <option value="Likee">Likee</option>
+              <option value="Twitch">Twitch</option>
+              <option value="Other App">Other App</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 12px;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; padding: 14px;">
+              <span>I-save sa Host List & D1 Database</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Bumalik sa Host List</button>
+          </div>
+        </form>
+      </div>
+    ` : ''}
+
+    <!-- Tab: Guidelines & Milestones -->
     <div id="hostTabRules" style="display: ${activeTab === 'rules' ? 'block' : 'none'};">
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
@@ -1109,6 +1335,29 @@ function renderHostPortalModal(activeTab = 'list') {
 
   modalBackdrop.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Attach Admin Add Host Form handler
+  const addForm = document.getElementById('adminAddNewHostForm');
+  if (addForm) {
+    addForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newHost = {
+        idNumber: document.getElementById('adminHostIdNumber').value.trim(),
+        idName: document.getElementById('adminHostIdName').value.trim(),
+        validDays: document.getElementById('adminHostValidDays').value.trim(),
+        liveTime: document.getElementById('adminHostLiveTime').value.trim(),
+        giftRevenue: document.getElementById('adminHostGiftRevenue').value.trim(),
+        gameRevenue: document.getElementById('adminHostGameRevenue').value.trim(),
+        app: document.getElementById('adminHostApp').value
+      };
+
+      activeHostList.unshift(newHost);
+      await saveHostToCloud(newHost);
+
+      showToast(`Host ${newHost.idName} (${newHost.idNumber}) matagumpay na naidagdag sa Host List!`);
+      renderHostPortalModal('list');
+    });
+  }
 }
 
 // --------------------------------------------------------------------------

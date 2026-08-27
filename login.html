@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SINDIKATO AGENCY — Master Admin Portal</title>
+  <link rel="icon" type="image/jpeg" href="assets/images/sindikato-logo.jpg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      background: var(--bg-dark);
+      overflow: hidden;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 460px;
+      background: var(--bg-tertiary);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 175, 55, 0.15);
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 16px auto;
+      border: 3px solid var(--accent-gold);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    .login-logo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .login-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .login-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    .login-alert {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .login-alert.error {
+      display: block;
+      background: rgba(255, 60, 60, 0.15);
+      border: 1px solid rgba(255, 60, 60, 0.4);
+      color: #ff8585;
+    }
+    .login-alert.success {
+      display: block;
+      background: rgba(39, 201, 63, 0.15);
+      border: 1px solid rgba(39, 201, 63, 0.4);
+      color: #5eead4;
+    }
+    .password-wrap {
+      position: relative;
+    }
+    .toggle-password-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <div class="hero-ambient-glow"></div>
+    <div class="hero-grid-pattern"></div>
+
+    <div class="login-box">
+      <div class="login-header">
+        <a href="index.html" class="login-logo">
+          <img src="assets/images/sindikato-logo.jpg" alt="Sindikato Emblem">
+        </a>
+        <div class="badge" style="margin-bottom: 10px;">
+          <span class="badge-dot"></span>
+          SINDIKATO SECURITY VAULT
+        </div>
+        <h1 class="login-title">Master Admin Login</h1>
+        <p class="login-subtitle">Ipasok ang iyong official admin credentials para sa full management access.</p>
+      </div>
+
+      <div id="loginAlert" class="login-alert"></div>
+
+      <form id="adminLoginForm">
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label class="form-label">Email Address *</label>
+          <input 
+            type="email" 
+            id="loginEmail" 
+            class="form-control" 
+            placeholder="e.g. joemardaguio1027@gmail.com" 
+            required 
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label class="form-label">Admin Password *</label>
+          <div class="password-wrap">
+            <input 
+              type="password" 
+              id="loginPassword" 
+              class="form-control" 
+              placeholder="••••••••••••" 
+              required 
+              autocomplete="current-password"
+              style="padding-right: 44px;"
+            >
+            <button type="button" id="togglePasswordBtn" class="toggle-password-btn" title="Show/Hide Password">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 14px; margin-bottom: 16px;">
+          <span>Login bilang Master Admin</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+
+        <div style="text-align: center;">
+          <a href="index.html" style="font-size: 0.84rem; color: var(--text-muted); text-decoration: none; transition: color var(--transition-fast);">
+            ← Bumalik sa Sindikato Homepage
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Master Credentials
+    const ADMIN_EMAIL = "joemardaguio1027@gmail.com";
+    const ADMIN_PASS = "pogiako123@";
+
+    const form = document.getElementById('adminLoginForm');
+    const emailInput = document.getElementById('loginEmail');
+    const passInput = document.getElementById('loginPassword');
+    const alertBox = document.getElementById('loginAlert');
+    const toggleBtn = document.getElementById('togglePasswordBtn');
+
+    // Toggle password visibility
+    toggleBtn.addEventListener('click', () => {
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.textContent = '🔒';
+      } else {
+        passInput.type = 'password';
+        toggleBtn.textContent = '👁️';
+      }
+    });
+
+    // Check if already logged in
+    const existingSession = localStorage.getItem('sindikato_admin_session');
+    if (existingSession) {
+      try {
+        const session = JSON.parse(existingSession);
+        if (session.loggedIn && session.email === ADMIN_EMAIL) {
+          alertBox.className = 'login-alert success';
+          alertBox.textContent = 'Naka-login ka na bilang Master Admin! Nireredirect ka na...';
+          setTimeout(() => {
+            window.location.href = 'index.html#host-recruiter';
+          }, 1000);
+        }
+      } catch (e) {}
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const enteredEmail = emailInput.value.trim().toLowerCase();
+      const enteredPass = passInput.value.trim();
+
+      if (enteredEmail === ADMIN_EMAIL.toLowerCase() && enteredPass === ADMIN_PASS) {
+        const sessionData = {
+          email: ADMIN_EMAIL,
+          loggedIn: true,
+          role: "Master Administrator",
+          loginTime: new Date().toISOString()
+        };
+        localStorage.setItem('sindikato_admin_session', JSON.stringify(sessionData));
+
+        alertBox.className = 'login-alert success';
+        alertBox.innerHTML = '<strong>Access Granted!</strong> Welcome Master Admin Joemar. Nireredirect...';
+        
+        setTimeout(() => {
+          window.location.href = 'index.html#host-recruiter';
+        }, 1200);
+      } else {
+        alertBox.className = 'login-alert error';
+        alertBox.textContent = 'Maling email o password. Pakisubukang muli.';
+        passInput.value = '';
+        passInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>

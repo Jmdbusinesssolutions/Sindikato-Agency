@@ -7,7 +7,7 @@ export default {
         return new Response(null, {
           headers: {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type"
           }
         });
@@ -56,7 +56,7 @@ export default {
         if (!env.DB) {
           return new Response(
             JSON.stringify({ success: false, message: "D1 Database binding 'DB' not found." }),
-            { headers: { "Content-Type": "application/json" }, status: 500 }
+            { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }, status: 500 }
           );
         }
 
@@ -67,7 +67,7 @@ export default {
           if (!id_number || !id_name) {
             return new Response(
               JSON.stringify({ success: false, message: "id_number and id_name are required." }),
-              { headers: { "Content-Type": "application/json" }, status: 400 }
+              { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }, status: 400 }
             );
           }
 
@@ -96,6 +96,39 @@ export default {
 
           return new Response(
             JSON.stringify({ success: true, message: "Host saved successfully.", info }),
+            { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } }
+          );
+        } catch (err) {
+          return new Response(
+            JSON.stringify({ success: false, error: err.message }),
+            { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }, status: 500 }
+          );
+        }
+      }
+
+      if (request.method === 'DELETE') {
+        if (!env.DB) {
+          return new Response(
+            JSON.stringify({ success: false, message: "D1 Database binding 'DB' not found." }),
+            { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }, status: 500 }
+          );
+        }
+
+        try {
+          const body = await request.json();
+          const { id_number } = body;
+
+          if (!id_number) {
+            return new Response(
+              JSON.stringify({ success: false, message: "id_number is required to delete." }),
+              { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }, status: 400 }
+            );
+          }
+
+          await env.DB.prepare("DELETE FROM hosts WHERE id_number = ?").bind(id_number).run();
+
+          return new Response(
+            JSON.stringify({ success: true, message: `Host ${id_number} deleted successfully.` }),
             { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } }
           );
         } catch (err) {
