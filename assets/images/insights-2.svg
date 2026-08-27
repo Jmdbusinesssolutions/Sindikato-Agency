@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="100%" height="100%">
-  <rect width="600" height="350" fill="#0d111a"/>
-  <text x="40" y="80" fill="#00e5ff" font-family="monospace" font-size="12">WEB ENGINEERING</text>
+  <rect width="600" height="350" fill="#0e1017"/>
+  <text x="40" y="80" fill="#ffd700" font-family="monospace" font-size="12">WEB ENGINEERING</text>
   <text x="40" y="140" fill="#ffffff" font-family="serif" font-size="32" font-style="italic">Building 60FPS WebGL in Next.js 15</text>
-  <rect x="40" y="240" width="140" height="3" fill="#00e5ff"/>
+  <rect x="40" y="240" width="140" height="3" fill="#ffd700"/>
 </svg>

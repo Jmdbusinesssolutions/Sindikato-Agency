@@ -203,22 +203,23 @@ function initReelCanvas() {
   window.addEventListener('resize', resize);
 
   const particles = [];
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 48; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
-      radius: Math.random() * 2 + 1,
-      alpha: Math.random() * 0.5 + 0.2
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: (Math.random() - 0.5) * 0.7,
+      radius: Math.random() * 2.2 + 1,
+      alpha: Math.random() * 0.6 + 0.25,
+      isGold: Math.random() > 0.3
     });
   }
 
   function animate() {
     ctx.clearRect(0, 0, width, height);
 
-    // Draw ambient grid
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    // Draw ambient gold/dark grid
+    ctx.strokeStyle = 'rgba(212, 175, 55, 0.04)';
     ctx.lineWidth = 1;
     const step = 40;
     for (let x = 0; x < width; x += step) {
@@ -234,7 +235,7 @@ function initReelCanvas() {
       ctx.stroke();
     }
 
-    // Update and draw particles
+    // Update and draw particles (Golden Embers)
     particles.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
@@ -246,7 +247,7 @@ function initReelCanvas() {
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(204, 255, 0, ${p.alpha})`;
+      ctx.fillStyle = p.isGold ? `rgba(255, 215, 0, ${p.alpha})` : `rgba(255, 255, 255, ${p.alpha * 0.7})`;
       ctx.fill();
     });
 
