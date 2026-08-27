@@ -2247,6 +2247,33 @@ body.cursor-hover .custom-cursor-follower {
   margin-bottom: 32px;
 }
 
+.portal-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.portal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-gold-light);
+  letter-spacing: 0.02em;
+  transition: all var(--transition-fast);
+}
+
+.portal-clickable-card:hover .portal-chip {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
 .portal-features-list {
   list-style: none;
   display: flex;

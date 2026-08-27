@@ -1116,26 +1116,18 @@ function renderHostPortalModal(activeTab = 'list') {
     <div id="hostTabList" style="display: ${activeTab === 'list' ? 'block' : 'none'};">
       
       <!-- Top Summary Badges -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 18px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
         <div class="host-summary-pill">
-          <div class="val">${totalHosts}</div>
-          <div class="lbl">Total Hosts</div>
+          <div class="val">${totalHosts} Active</div>
+          <div class="lbl">Total Registered Hosts</div>
         </div>
         <div class="host-summary-pill">
           <div class="val">21 Days</div>
-          <div class="lbl">Target Valid Days</div>
+          <div class="lbl">Monthly Target Valid Days</div>
         </div>
         <div class="host-summary-pill">
-          <div class="val">Live Verified</div>
-          <div class="lbl">Live Time Status</div>
-        </div>
-        <div class="host-summary-pill">
-          <div class="val">Gift Tier</div>
-          <div class="lbl">Gift Revenue</div>
-        </div>
-        <div class="host-summary-pill">
-          <div class="val">Game Tier</div>
-          <div class="lbl">Game Revenue</div>
+          <div class="val">Cloud Sync</div>
+          <div class="lbl">D1 Verified Database</div>
         </div>
       </div>
 
