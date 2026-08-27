@@ -1,7 +1,14 @@
 /* ==========================================================================
-   SINDIKATO AGENCY — RESPONSIVE STYLES
+   SINDIKATO AGENCY — RESPONSIVE STYLES (MOBILE OPTIMIZED)
    ========================================================================== */
 
+/* --- Prevent Any Horizontal Overflow on Mobile --- */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* --- Large Desktops & Tablets Landscape (max-width: 1200px) --- */
 @media (max-width: 1200px) {
   .hero-stats-row {
     grid-template-columns: repeat(2, 1fr);
@@ -26,9 +33,15 @@
   }
 }
 
+/* --- Tablets & Mobile Navigation Drawer (max-width: 992px) --- */
 @media (max-width: 992px) {
   .section-padding {
-    padding: 80px 0;
+    padding: 70px 0;
+  }
+
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
   }
   
   .main-nav {
@@ -36,26 +49,55 @@
     top: 0;
     right: -100%;
     width: 85%;
-    max-width: 400px;
+    max-width: 360px;
     height: 100vh;
-    background: var(--bg-secondary);
+    background: rgba(10, 12, 18, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid var(--accent-gold);
     flex-direction: column;
-    align-items: flex-start;
-    padding: 100px 36px 40px 36px;
-    gap: 24px;
+    align-items: stretch;
+    padding: 90px 24px 40px 24px;
+    gap: 16px;
     transition: right var(--transition-smooth);
-    z-index: 999;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 2005;
+    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.85);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   .main-nav.active {
     right: 0;
   }
+
+  .main-nav .nav-link {
+    font-size: 1.05rem;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(212, 175, 55, 0.08);
+    display: block;
+    width: 100%;
+  }
+
+  .main-nav .nav-link:active,
+  .main-nav .nav-link:hover {
+    background: rgba(212, 175, 55, 0.12);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold-bright);
+  }
+
+  .mobile-only-cta {
+    display: block !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
   
   .mobile-menu-btn {
     display: flex;
-    z-index: 1001;
+    z-index: 2010;
   }
   
   .mobile-menu-btn.open span:nth-child(1) {
@@ -70,28 +112,19 @@
     transform: translateY(-7px) rotate(-45deg);
   }
   
-  .dropdown-menu {
-    position: static;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    width: 100%;
-    box-shadow: none;
-    background: rgba(255, 255, 255, 0.03);
-    margin-top: 8px;
-  }
-  
   .portfolio-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
   
   .estimator-container {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
   
   .faq-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 32px;
   }
   
   .insights-grid {
@@ -100,10 +133,12 @@
   
   .commission-grid {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
   
   .portals-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
   
   .contact-layout-grid {
@@ -119,20 +154,53 @@
   }
 }
 
+/* --- Mobile Phones & Phablets (max-width: 768px) --- */
 @media (max-width: 768px) {
+  .section-padding {
+    padding: 55px 0;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 6vw, 2.3rem);
+  }
+
+  .section-subtitle {
+    font-size: 0.92rem;
+  }
+
+  /* Header Branding on Mobile */
+  .brand-logo-img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-logo-title {
+    font-size: 0.95rem;
+  }
+
+  .brand-logo-sub {
+    font-size: 0.58rem;
+  }
+
+  #navAdminBtn {
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Hero Section */
   .hero-cover-wrapper {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   
   .hero-cover-banner {
     border-radius: var(--radius-md);
-    aspect-ratio: 16 / 8.5;
+    aspect-ratio: 16 / 9;
   }
   
   .hero-brand-emblem {
-    width: 96px;
-    height: 96px;
-    margin: -48px auto 18px auto;
+    width: 80px;
+    height: 80px;
+    margin: -40px auto 14px auto;
   }
   
   .hero-brand-emblem img {
@@ -140,83 +208,260 @@
   }
 
   .hero-headline {
-    font-size: 2.6rem;
+    font-size: clamp(1.9rem, 7.5vw, 2.7rem);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .hero-subhead {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
   }
   
   .hero-cta-group {
     flex-direction: column;
     width: 100%;
+    gap: 12px;
   }
   
   .hero-cta-group .btn {
     width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
   }
   
   .quick-brief-bar {
     flex-direction: column;
-    border-radius: var(--radius-lg);
-    padding: 16px;
+    border-radius: var(--radius-md);
+    padding: 14px;
+    gap: 10px;
   }
   
   .quick-brief-bar .btn {
     width: 100%;
+    justify-content: center;
   }
   
   .hero-stats-row {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
+    margin-top: 40px;
   }
-  
-  .reel-card {
-    height: 380px;
+
+  .hero-stat-card {
+    padding: 20px;
   }
-  
-  .reel-overlay {
-    padding: 24px;
+
+  /* Portals Grid & Cards */
+  .portal-clickable-card {
+    padding: 24px 18px;
   }
-  
-  .why-us-grid {
-    grid-template-columns: 1fr;
+
+  .portal-title {
+    font-size: 1.5rem;
   }
-  
-  .industries-grid {
-    grid-template-columns: 1fr;
+
+  .portal-subtitle {
+    font-size: 0.95rem;
   }
-  
+
+  .portal-chips-wrap {
+    gap: 6px;
+  }
+
+  .portal-chip {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+
+  /* Host Salary & Commission Switcher */
+  .portfolio-filter-bar,
+  .portal-tabs-nav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    width: 100%;
+    scrollbar-width: none;
+  }
+
+  .portfolio-filter-bar::-webkit-scrollbar,
+  .portal-tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    padding: 8px 14px;
+    flex-shrink: 0;
+  }
+
+  .portal-tab-button {
+    white-space: nowrap;
+    font-size: 0.82rem;
+    padding: 10px 16px !important;
+    flex-shrink: 0;
+  }
+
+  /* Diamond Tiers Grid */
+  .tiers-table-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .tier-item-card {
+    padding: 12px 10px;
+  }
+
+  .tier-reward {
+    font-size: 1.05rem;
+  }
+
+  .recruiter-calc-card {
+    padding: 18px 16px;
+  }
+
+  .calc-result-amount {
+    font-size: 1.35rem;
+  }
+
+  /* PK Battles Cards */
+  .project-media-wrap {
+    height: 220px;
+  }
+
+  .project-info {
+    padding: 20px;
+  }
+
+  .project-title {
+    font-size: 1.35rem;
+  }
+
+  .project-desc {
+    font-size: 0.86rem;
+  }
+
+  /* Event Configurator */
+  .estimator-container {
+    padding: 18px 16px;
+  }
+
   .estimator-options-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
-  
-  .estimator-container {
-    padding: 24px;
+
+  .option-box {
+    padding: 14px;
+    min-height: 48px;
   }
-  
-  .testimonial-card-single {
-    padding: 30px 24px;
+
+  .estimator-price-tag {
+    font-size: 2.2rem;
   }
-  
-  .testimonial-author-row {
-    flex-direction: column;
-    align-items: flex-start;
+
+  /* Why Us Grid & Industries */
+  .why-us-grid,
+  .industries-grid {
+    grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
+  .why-card {
+    padding: 24px 20px;
+  }
+
+  .why-number {
+    font-size: 2rem;
+  }
+
+  .why-title {
+    font-size: 1.25rem;
+  }
+
+  /* Contact Form */
   .form-group-row {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
   
   .contact-form-wrap {
-    padding: 24px;
+    padding: 20px 16px;
+  }
+
+  /* Modals on Mobile Phones */
+  .modal-backdrop {
+    padding: 12px;
+  }
+
+  .modal-content-box {
+    padding: 24px 16px;
+    max-height: 93vh;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-close-btn {
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+
+  /* D1 Host Records Table on Mobile */
+  .host-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-sm);
+    margin-top: 10px;
+  }
+
+  .portal-records-table {
+    min-width: 580px;
+  }
+
+  .portal-records-table th,
+  .portal-records-table td {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+
+  /* Prevent iOS Auto-Zoom on Form Inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Toast Notification */
+  .toast-notification {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    width: auto;
+    max-width: calc(100% - 28px);
+    font-size: 0.82rem;
+    padding: 12px 14px;
   }
   
+  /* Footer */
   .footer-top-grid {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
   
   .footer-bottom-row {
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     text-align: center;
+    font-size: 0.78rem;
   }
   
   .award-row {
@@ -230,5 +475,41 @@
   
   .custom-cursor, .custom-cursor-follower {
     display: none !important;
+  }
+}
+
+/* --- Small Mobile Phones (max-width: 480px) --- */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .hero-headline {
+    font-size: 1.85rem;
+  }
+
+  .tiers-table-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .tier-reward {
+    font-size: 0.95rem;
+  }
+
+  .tier-diamonds {
+    font-size: 0.75rem;
+  }
+
+  .sindikato-motto-ribbon {
+    font-size: 0.72rem;
+    padding: 10px 12px;
+    letter-spacing: 0.06em;
+  }
+
+  .portal-summary-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 }
