@@ -1,6 +1,9 @@
 name = "sindikato-agency"
+main = "worker.js"
 compatibility_date = "2026-08-27"
-pages_build_output_dir = "."
+
+[assets]
+directory = "."
 
 # Cloudflare D1 Database Binding
 [[d1_databases]]
