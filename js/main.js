@@ -902,9 +902,9 @@ function isAdminLoggedIn() {
 }
 
 window.logoutAdmin = function() {
-  if (confirm('Sigurado ka bang nais mong mag-logout bilang Master Admin?')) {
+  if (confirm('Are you sure you want to log out from Master Admin mode?')) {
     localStorage.removeItem('sindikato_admin_session');
-    showToast('Naka-logout na mula sa Master Admin mode.');
+    showToast('Logged out from Master Admin mode.');
     initAdminNavigation();
     const modalBackdrop = document.getElementById('caseStudyModal');
     if (modalBackdrop && modalBackdrop.classList.contains('open')) {
@@ -972,10 +972,10 @@ async function saveHostToCloud(host) {
       body: JSON.stringify({
         id_number: host.idNumber,
         id_name: host.idName,
-        valid_days: host.validDays,
-        live_time: host.liveTime,
-        gift_revenue: host.giftRevenue,
-        game_revenue: host.gameRevenue,
+        validDays: host.validDays,
+        liveTime: host.liveTime,
+        giftRevenue: host.giftRevenue,
+        gameRevenue: host.gameRevenue,
         app: host.app,
         status: 'Active'
       })
@@ -995,16 +995,16 @@ async function deleteHostFromCloud(idNumber) {
 
 window.deleteHostItem = function(index) {
   if (!isAdminLoggedIn()) {
-    alert('Kailangan mong mag-login bilang Master Admin bago mag-alis ng host.');
+    alert('You must log in as Master Admin before removing a host.');
     window.location.href = 'login.html';
     return;
   }
   const host = activeHostList[index];
-  if (confirm(`Sigurado ka bang nais mong tanggalin si ${host.idName} (${host.idNumber}) sa Host List?`)) {
+  if (confirm(`Are you sure you want to remove ${host.idName} (${host.idNumber}) from the Host List?`)) {
     const idToDelete = host.idNumber;
     activeHostList.splice(index, 1);
     deleteHostFromCloud(idToDelete);
-    showToast(`Host ${host.idName} matagumpay na natanggal!`);
+    showToast(`Host ${host.idName} has been successfully removed!`);
     renderHostPortalModal('list');
   }
 };
@@ -1052,7 +1052,7 @@ function renderHostPortalModal(activeTab = 'list') {
         <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">SINDIKATO STREAMER VAULT</span>
       </div>
       <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Host List & Streamer Performance</h2>
-      <p style="color: var(--text-secondary); font-size: 0.92rem;">Subaybayan ang real-time records ng mga host: ID number, ID name, Valid days, Live time, Gift Revenue, at Game Revenue.</p>
+      <p style="color: var(--text-secondary); font-size: 0.92rem;">Track real-time streamer records: ID number, ID name, Valid days, Live streaming time, Gift Revenue, and Game Revenue.</p>
     </div>
 
     <!-- Admin Status Banner -->
@@ -1077,7 +1077,7 @@ function renderHostPortalModal(activeTab = 'list') {
     ` : `
       <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
         <div style="font-size: 0.8rem; color: var(--text-muted);">
-          👁️ Viewing Mode (Read-Only). Mag-login bilang Admin para makapag-add o tanggal ng host.
+          👁️ Viewing Mode (Read-Only). Sign in as Master Admin to register or remove hosts.
         </div>
         <a href="login.html" class="btn btn-secondary btn-pill" style="padding: 5px 12px; font-size: 0.76rem;">
           <span>🔐 Admin Login</span>
@@ -1122,7 +1122,7 @@ function renderHostPortalModal(activeTab = 'list') {
             type="text" 
             id="hostListSearchInput" 
             class="form-control" 
-            placeholder="🔍 Mag-search ayon sa ID number o ID name..." 
+            placeholder="🔍 Search by ID number or ID name..." 
             oninput="filterHostListTable()"
             style="padding: 10px 14px; font-size: 0.88rem; background: rgba(0,0,0,0.4);"
           >
@@ -1191,7 +1191,7 @@ function renderHostPortalModal(activeTab = 'list') {
                 </td>
                 ${adminActive ? `
                   <td style="text-align: center;">
-                    <button type="button" class="host-row-btn" onclick="deleteHostItem(${idx})" title="Tanggalin ang Host">
+                    <button type="button" class="host-row-btn" onclick="deleteHostItem(${idx})" title="Remove Host">
                       ✕
                     </button>
                   </td>
@@ -1200,7 +1200,7 @@ function renderHostPortalModal(activeTab = 'list') {
             `).join('') : `
               <tr>
                 <td colspan="${adminActive ? 8 : 7}" style="text-align: center; padding: 32px; color: var(--text-muted);">
-                  Walang nakitang host record sa talaan.
+                  No host records found in the database.
                 </td>
               </tr>
             `}
@@ -1218,41 +1218,41 @@ function renderHostPortalModal(activeTab = 'list') {
       <div id="hostTabAdd" style="display: ${activeTab === 'add' ? 'block' : 'none'};">
         <form id="adminAddNewHostForm" style="background: rgba(0,0,0,0.25); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--accent-gold-light);">Mag-rehistro ng Bagong Host (Admin Access)</h3>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--accent-gold-light);">Register New Host (Admin Access)</h3>
             <span class="badge" style="margin-bottom: 0;">👑 MASTER ADMIN</span>
           </div>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Ipasok ang mga detalye ng host para awtomatikong mai-save sa Cloudflare D1 Database at Host List.</p>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Enter host streamer metrics to automatically save to the Cloudflare D1 Database and live Host List.</p>
           
           <div class="form-group-row">
             <div class="form-group">
               <label class="form-label">ID Number *</label>
-              <input type="text" id="adminHostIdNumber" class="form-control" placeholder="e.g. SIN-90823 o 8374921" required>
+              <input type="text" id="adminHostIdNumber" class="form-control" placeholder="e.g. SIN-90823 or 8374921" required>
             </div>
             <div class="form-group">
               <label class="form-label">ID Name / Stage Name *</label>
-              <input type="text" id="adminHostIdName" class="form-control" placeholder="e.g. QueenMia_Live o StarHost99" required>
+              <input type="text" id="adminHostIdName" class="form-control" placeholder="e.g. QueenMia_Live or StarHost99" required>
             </div>
           </div>
 
           <div class="form-group-row">
             <div class="form-group">
               <label class="form-label">Valid Days * (Target: 21 Days)</label>
-              <input type="text" id="adminHostValidDays" class="form-control" placeholder="e.g. 26 Days o 21 Days" required>
+              <input type="text" id="adminHostValidDays" class="form-control" placeholder="e.g. 26 Days or 21 Days" required>
             </div>
             <div class="form-group">
-              <label class="form-label">Live Time *</label>
-              <input type="text" id="adminHostLiveTime" class="form-control" placeholder="e.g. 88.5 hrs o 120 hrs" required>
+              <label class="form-label">Live Streaming Time *</label>
+              <input type="text" id="adminHostLiveTime" class="form-control" placeholder="e.g. 88.5 hrs or 120 hrs" required>
             </div>
           </div>
 
           <div class="form-group-row">
             <div class="form-group">
               <label class="form-label">Gift Revenue *</label>
-              <input type="text" id="adminHostGiftRevenue" class="form-control" placeholder="e.g. ₱94,500 o 1,500,000 Diamonds" required>
+              <input type="text" id="adminHostGiftRevenue" class="form-control" placeholder="e.g. ₱94,500 or 1,500,000 Diamonds" required>
             </div>
             <div class="form-group">
               <label class="form-label">Game Revenue *</label>
-              <input type="text" id="adminHostGameRevenue" class="form-control" placeholder="e.g. ₱42,300 o 800,000 Coins" required>
+              <input type="text" id="adminHostGameRevenue" class="form-control" placeholder="e.g. ₱42,300 or 800,000 Coins" required>
             </div>
           </div>
 
@@ -1270,10 +1270,10 @@ function renderHostPortalModal(activeTab = 'list') {
 
           <div style="display: flex; gap: 12px;">
             <button type="submit" class="btn btn-primary" style="flex: 1; padding: 14px;">
-              <span>I-save sa Host List & D1 Database</span>
+              <span>Save to Host List & D1 Database</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
-            <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Bumalik sa Host List</button>
+            <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Back to Host List</button>
           </div>
         </form>
       </div>
@@ -1285,16 +1285,16 @@ function renderHostPortalModal(activeTab = 'list') {
         <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💎 Revenue Payout Schedule & Validity</h4>
           <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
-            Lahat ng official Gift Revenue at Game Revenue ay computed monthly base sa inyong total <strong>Valid Days</strong> at <strong>Live Time</strong>. Ang payouts ay inire-release tuwing <strong>5th at 20th ng bawat buwan</strong> diretso sa inyong GCash/Bank account.
+            All official Gift Revenue and Game Revenue are computed monthly based on your total <strong>Valid Days</strong> and <strong>Live Streaming Time</strong>. Payouts are officially released on the <strong>5th and 20th of every month</strong> directly to your registered GCash, Maya, or Bank account.
           </p>
         </div>
 
         <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <h4 style="font-weight: 800; margin-bottom: 8px;">🛡️ Agency Streaming Standards</h4>
           <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: var(--text-secondary);">
-            <li>✓ Minimum of 21 Valid Days buwan-buwan para ma-qualify sa full agency bonuses.</li>
-            <li>✓ Minimum of 60 to 120 Live Streaming Hours para sa elite syndicate tier standing.</li>
-            <li>✓ <strong>LOYALTY • DISCIPLINE • RESPECT</strong> — Panatilihin ang professional agency representation sa lahat ng live broadcasts.</li>
+            <li>✓ Minimum of 21 Valid Days per month to qualify for full agency tier bonuses.</li>
+            <li>✓ Minimum of 60 to 120 Live Streaming Hours for elite syndicate ranking and promotions.</li>
+            <li>✓ <strong>LOYALTY • DISCIPLINE • RESPECT</strong> — Maintain highest professional standards during all live broadcasts.</li>
           </ul>
         </div>
 
@@ -1303,7 +1303,7 @@ function renderHostPortalModal(activeTab = 'list') {
         </div>
 
         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-          <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Bumalik sa Host List</button>
+          <button type="button" class="btn btn-secondary" onclick="renderHostPortalModal('list')">Back to Host List</button>
         </div>
       </div>
     </div>
@@ -1330,7 +1330,7 @@ function renderHostPortalModal(activeTab = 'list') {
       activeHostList.unshift(newHost);
       await saveHostToCloud(newHost);
 
-      showToast(`Host ${newHost.idName} (${newHost.idNumber}) matagumpay na naidagdag sa Host List!`);
+      showToast(`Host ${newHost.idName} (${newHost.idNumber}) successfully registered to the Host List!`);
       renderHostPortalModal('list');
     });
   }
@@ -1367,7 +1367,7 @@ function renderRecruiterPortalModal(activeTab = 'submit') {
         <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-gold-bright);">RECRUITMENT VAULT</span>
       </div>
       <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Recruiter Submission & Talent Hub</h2>
-      <p style="color: var(--text-secondary); font-size: 0.92rem;">I-submit ang mga bagong na-recruit mong streamers at subaybayan ang iyong direct commission rewards.</p>
+      <p style="color: var(--text-secondary); font-size: 0.92rem;">Submit newly recruited streamers and track your direct cash commission rewards.</p>
     </div>
 
     <!-- Portal Navigation Tabs -->
@@ -1386,7 +1386,7 @@ function renderRecruiterPortalModal(activeTab = 'submit') {
             <input type="text" id="recruiterIdInput" class="form-control" placeholder="e.g. Agent Marco / REC-104" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Recruiter GCash / Payout Account *</label>
+            <label class="form-label">Recruiter GCash / Maya / Payout Account *</label>
             <input type="text" id="recruiterPayoutInput" class="form-control" placeholder="e.g. GCash 0918-987-6543" required>
           </div>
         </div>
@@ -1499,17 +1499,17 @@ function renderRecruiterPortalModal(activeTab = 'submit') {
 
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <button class="btn btn-primary" onclick="renderRecruiterPortalModal('submit')">+ Add Another Host</button>
-          <button class="btn btn-secondary" onclick="alert('Recruiter Talent Roster copied!');">Copy Roster</button>
+          <button class="btn btn-secondary" onclick="alert('Recruiter Talent Roster copied to clipboard!');">Copy Roster</button>
           <button class="btn btn-secondary" onclick="document.getElementById('caseStudyModal').classList.remove('open')">Close</button>
         </div>
       ` : `
         <div style="text-align: center; padding: 40px 20px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
           <div style="font-size: 3rem; margin-bottom: 12px;">💼</div>
-          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">Wala pang na-submit na Recruited Host</h3>
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">No Recruited Hosts Submitted Yet</h3>
           <p style="color: var(--text-secondary); max-width: 460px; margin: 0 auto 20px auto; font-size: 0.9rem;">
-            Gamitin ang Tab 1 para i-submit ang mga bagong hosts na iyong na-recruit para mai-record sa commission payout vault.
+            Use Tab 1 to submit new streamer recruits to record them in your commission vault.
           </p>
-          <button class="btn btn-primary" onclick="renderRecruiterPortalModal('submit')">I-submit ang Unang Host</button>
+          <button class="btn btn-primary" onclick="renderRecruiterPortalModal('submit')">Submit First Host</button>
         </div>
       `}
     </div>
@@ -1520,7 +1520,7 @@ function renderRecruiterPortalModal(activeTab = 'submit') {
         <div style="background: rgba(212,175,55,0.06); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <h4 style="font-weight: 800; color: var(--accent-gold-bright); margin-bottom: 8px;">💰 Recruiter Cash Commission Mechanics</h4>
           <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
-            Bilang recruiter, awtomatiko kang kikita ng direct cash commission sa bawat na-recruit mong host sa tuwing makakamit nila ang kanilang diamond targets bawat buwan.
+            As an official recruiter, you earn direct cash commissions on every active host you scout whenever they achieve their monthly diamond target tiers.
           </p>
         </div>
 
@@ -1583,7 +1583,7 @@ function renderRecruiterPortalModal(activeTab = 'submit') {
       roster.unshift(newRecruit);
       localStorage.setItem('sindikato_recruited_roster', JSON.stringify(roster));
 
-      showToast(`Matagumpay na naisumite si ${newRecruit.stageName} sa Recruiter Roster!`);
+      showToast(`Successfully submitted ${newRecruit.stageName} to the Recruiter Roster!`);
       renderRecruiterPortalModal('roster');
     });
   }
@@ -1605,7 +1605,7 @@ function renderSubAgencyModal() {
       </div>
       <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Apply for Sub-Agency Partnership</h2>
       <p style="color: var(--text-secondary); font-size: 0.92rem;">
-        Mag-apply bilang opisyal na Sub-Agency ng Sindikato. Pamahalaan ang iyong sariling team ng streamers at recruiters na may direct master agency split rates, enterprise dashboard, at VIP account support.
+        Apply as an official Sub-Agency of Sindikato. Lead your own roster of streamers and recruiters with master agency split rates, enterprise analytics, and VIP key account support.
       </p>
     </div>
 
@@ -1659,11 +1659,11 @@ function renderSubAgencyModal() {
 
       <div class="form-group">
         <label class="form-label">Sub-Agency Growth Goals & Background *</label>
-        <textarea id="subAgencyNotes" class="form-control" style="min-height: 90px;" placeholder="Ibahagi ang iyong kasalukuyang streaming agency experience, mga plano para sa recruitment, at mga target platform..." required></textarea>
+        <textarea id="subAgencyNotes" class="form-control" style="min-height: 90px;" placeholder="Share your live streaming agency background, recruitment strategy, and growth targets..." required></textarea>
       </div>
 
       <div style="background: rgba(212,175,55,0.08); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 20px; font-size: 0.82rem; color: var(--accent-gold-light);">
-        🔒 VIP Partnership Review: Ang iyong sub-agency application ay direktang ididirekta sa Sindikato Agency Executive Directors para sa exclusive interview at terms alignment.
+        🔒 VIP Partnership Review: Your sub-agency application will be directly forwarded to the Sindikato Executive Directors for exclusive review and terms alignment.
       </div>
 
       <div style="display: flex; gap: 14px;">
@@ -1700,7 +1700,7 @@ function renderSubAgencyModal() {
 
       modalBackdrop.classList.remove('open');
       document.body.style.overflow = '';
-      showToast(`Matagumpay na naisumite ang application para sa ${appData.name}! Makikipag-ugnayan ang Master Agency Director sa loob ng 4 oras.`);
+      showToast(`Application for ${appData.name} submitted successfully! A Master Agency Director will contact you within 4 hours.`);
     });
   }
 }
@@ -1721,7 +1721,7 @@ function renderApplyRecruiterModal() {
       </div>
       <h2 style="font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Apply as Official Talent Recruiter</h2>
       <p style="color: var(--text-secondary); font-size: 0.92rem;">
-        Sumali sa Sindikato Recruiter Network. Kumita ng direktang cash commissions (₱150 hanggang ₱5,000 bawat host milestone) bawat buwan. Walang puhunan o bayad sa pagpapatala.
+        Join the Sindikato Recruiter Network. Earn direct cash commissions (₱150 to ₱5,000 per host milestone) every month with zero upfront costs or registration fees.
       </p>
     </div>
 
@@ -1770,7 +1770,7 @@ function renderApplyRecruiterModal() {
 
       <div class="form-group">
         <label class="form-label">Why do you want to recruit with Sindikato Agency? *</label>
-        <textarea id="recruiterApplicantReason" class="form-control" style="min-height: 80px;" placeholder="Ibahagi ang iyong recruitment strategy o background sa live streaming..." required></textarea>
+        <textarea id="recruiterApplicantReason" class="form-control" style="min-height: 80px;" placeholder="Share your live streaming experience and recruitment strategy..." required></textarea>
       </div>
 
       <div style="display: flex; gap: 14px;">
@@ -1807,7 +1807,7 @@ function renderApplyRecruiterModal() {
 
       modalBackdrop.classList.remove('open');
       document.body.style.overflow = '';
-      showToast(`Maligayang pagdating sa Sindikato Recruiter Network, Agent ${recruiterData.code}! Ipinadala na ang iyong onboarding packet.`);
+      showToast(`Welcome to the Sindikato Recruiter Network, Agent ${recruiterData.code}! Your onboarding packet has been dispatched.`);
     });
   }
 }

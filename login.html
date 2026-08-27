@@ -115,7 +115,7 @@
           SINDIKATO SECURITY VAULT
         </div>
         <h1 class="login-title">Master Admin Login</h1>
-        <p class="login-subtitle">Ipasok ang iyong official admin credentials para sa full management access.</p>
+        <p class="login-subtitle">Enter your official admin credentials for full management access.</p>
       </div>
 
       <div id="loginAlert" class="login-alert"></div>
@@ -150,13 +150,13 @@
         </div>
 
         <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 14px; margin-bottom: 16px;">
-          <span>Login bilang Master Admin</span>
+          <span>Sign In as Master Admin</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
 
         <div style="text-align: center;">
           <a href="index.html" style="font-size: 0.84rem; color: var(--text-muted); text-decoration: none; transition: color var(--transition-fast);">
-            ← Bumalik sa Sindikato Homepage
+            ← Back to Sindikato Homepage
           </a>
         </div>
       </form>
@@ -192,7 +192,7 @@
         const session = JSON.parse(existingSession);
         if (session.loggedIn && session.email === ADMIN_EMAIL) {
           alertBox.className = 'login-alert success';
-          alertBox.textContent = 'Naka-login ka na bilang Master Admin! Nireredirect ka na...';
+          alertBox.textContent = 'You are already logged in as Master Admin! Redirecting...';
           setTimeout(() => {
             window.location.href = 'index.html#host-recruiter';
           }, 1000);
@@ -215,14 +215,14 @@
         localStorage.setItem('sindikato_admin_session', JSON.stringify(sessionData));
 
         alertBox.className = 'login-alert success';
-        alertBox.innerHTML = '<strong>Access Granted!</strong> Welcome Master Admin. Nireredirect...';
+        alertBox.innerHTML = '<strong>Access Granted!</strong> Welcome Master Admin. Redirecting...';
         
         setTimeout(() => {
           window.location.href = 'index.html#host-recruiter';
         }, 1200);
       } else {
         alertBox.className = 'login-alert error';
-        alertBox.textContent = 'Maling email o password. Pakisubukang muli.';
+        alertBox.textContent = 'Invalid email or password. Please try again.';
         passInput.value = '';
         passInput.focus();
       }
