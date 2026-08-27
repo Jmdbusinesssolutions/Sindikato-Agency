@@ -1,0 +1,207 @@
+/* ==========================================================================
+   SINDIKATO AGENCY — RESPONSIVE STYLES
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+  .hero-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+  
+  .disciplines-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .why-us-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .industries-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 992px) {
+  .section-padding {
+    padding: 80px 0;
+  }
+  
+  .main-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 400px;
+    height: 100vh;
+    background: var(--bg-secondary);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 100px 36px 40px 36px;
+    gap: 24px;
+    transition: right var(--transition-smooth);
+    z-index: 999;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+  }
+  
+  .main-nav.active {
+    right: 0;
+  }
+  
+  .mobile-menu-btn {
+    display: flex;
+    z-index: 1001;
+  }
+  
+  .mobile-menu-btn.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  
+  .mobile-menu-btn.open span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .mobile-menu-btn.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    width: 100%;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.03);
+    margin-top: 8px;
+  }
+  
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .estimator-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .faq-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-layout-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .award-row {
+    grid-template-columns: 90px 1.2fr 1fr;
+  }
+  
+  .award-issuer {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-headline {
+    font-size: 2.6rem;
+  }
+  
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+  
+  .quick-brief-bar {
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    padding: 16px;
+  }
+  
+  .quick-brief-bar .btn {
+    width: 100%;
+  }
+  
+  .hero-stats-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .reel-card {
+    height: 380px;
+  }
+  
+  .reel-overlay {
+    padding: 24px;
+  }
+  
+  .why-us-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .industries-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .estimator-options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .estimator-container {
+    padding: 24px;
+  }
+  
+  .testimonial-card-single {
+    padding: 30px 24px;
+  }
+  
+  .testimonial-author-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .form-group-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-form-wrap {
+    padding: 24px;
+  }
+  
+  .footer-top-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-bottom-row {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .award-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .award-category {
+    font-size: 0.85rem;
+  }
+  
+  .custom-cursor, .custom-cursor-follower {
+    display: none !important;
+  }
+}
