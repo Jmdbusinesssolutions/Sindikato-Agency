@@ -1078,7 +1078,7 @@ function renderHostPortalModal(activeTab = 'list') {
           <span style="font-size: 1.3rem;">👑</span>
           <div>
             <div style="font-weight: 800; color: var(--accent-gold-bright); font-size: 0.88rem; letter-spacing: 0.04em;">MASTER ADMIN MODE ACTIVE</div>
-            <div style="font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono);">${MASTER_ADMIN_EMAIL}</div>
+            <div style="font-size: 0.74rem; color: var(--accent-gold-light); font-family: var(--font-mono);">👑 Executive Full Management Access Verified</div>
           </div>
         </div>
         <div style="display: flex; gap: 8px;">
