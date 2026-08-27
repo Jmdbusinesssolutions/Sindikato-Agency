@@ -453,7 +453,7 @@ function initCaseStudyModals() {
 }
 
 /* --------------------------------------------------------------------------
-   9. INTERACTIVE PROJECT SCOPE & ESTIMATOR CALCULATOR
+   9. INTERACTIVE AGENCY EVENTS & ACTIVATIONS CONFIGURATOR
    -------------------------------------------------------------------------- */
 function initProjectEstimator() {
   const scopeOptions = document.querySelectorAll('.scope-opt');
@@ -466,15 +466,15 @@ function initProjectEstimator() {
   if (!priceDisplay) return;
 
   let state = {
-    scope: 'web',
+    scope: 'tournament',
     scopePrice: 8500,
-    scopeName: 'Full-Stack Web Engineering',
-    size: 'growth',
+    scopeName: 'Creator Tournament & PK',
+    size: 'grand',
     sizePrice: 4000,
-    sizeName: 'Growth / Scale Stage',
-    timeline: 'standard',
+    sizeName: 'Grand Venue (500–1,500)',
+    timeline: 'broadcast',
     timelineMultiplier: 1.0,
-    timelineName: '4-6 Weeks Standard'
+    timelineName: 'Multi-Cam Broadcast (Standard)'
   };
 
   function updatePrices() {
@@ -483,10 +483,10 @@ function initProjectEstimator() {
 
     if (breakdownList) {
       breakdownList.innerHTML = `
-        <li><span>Core Discipline</span><strong>${state.scopeName}</strong></li>
-        <li><span>Project Tier</span><strong>${state.sizeName}</strong></li>
-        <li><span>Delivery Velocity</span><strong>${state.timelineName}</strong></li>
-        <li><span>Code Ownership</span><strong style="color: var(--accent-lime);">100% Full IP Transfer</strong></li>
+        <li><span>Event Format</span><strong>${state.scopeName}</strong></li>
+        <li><span>Audience Scale</span><strong>${state.sizeName}</strong></li>
+        <li><span>Broadcast Tier</span><strong>${state.timelineName}</strong></li>
+        <li><span>Management</span><strong style="color: var(--accent-lime);">Full End-to-End Execution</strong></li>
       `;
     }
   }
@@ -528,13 +528,13 @@ function initProjectEstimator() {
     bookEstimateBtn.addEventListener('click', () => {
       const messageField = document.getElementById('contactMessage');
       if (messageField) {
-        messageField.value = `[AUTO-CONFIGURED ESTIMATE]\nDiscipline: ${state.scopeName}\nTier: ${state.sizeName}\nTimeline: ${state.timelineName}\nEstimated Budget: ${priceDisplay.textContent}\n\nHi Sindikato Team, let's schedule our project kickoff discussion.`;
+        messageField.value = `[EVENT ACTIVATION BRIEF]\nEvent Format: ${state.scopeName}\nAudience Scale: ${state.sizeName}\nBroadcast Tier: ${state.timelineName}\nEstimated Production Investment: ${priceDisplay.textContent}\n\nHi Sindikato Agency, we want to book this live event activation and production package.`;
       }
       const contactSection = document.getElementById('contact');
       if (contactSection) {
         contactSection.scrollIntoView({ behavior: 'smooth' });
       }
-      showToast(`Estimator brief transferred to contact form!`);
+      showToast(`Event activation brief transferred to booking form!`);
     });
   }
 
