@@ -915,7 +915,6 @@ window.logoutAdmin = function() {
 
 function initAdminNavigation() {
   const navBtn = document.getElementById('navAdminBtn');
-  const mobileNavBtn = document.getElementById('mobileNavAdminBtn');
   const loggedIn = isAdminLoggedIn();
 
   if (navBtn) {
@@ -934,21 +933,6 @@ function initAdminNavigation() {
       navBtn.style.borderColor = '';
       navBtn.href = 'login.html';
       navBtn.onclick = null;
-    }
-  }
-
-  if (mobileNavBtn) {
-    if (loggedIn) {
-      mobileNavBtn.textContent = '👑 Master Admin Panel';
-      mobileNavBtn.href = '#';
-      mobileNavBtn.onclick = (e) => {
-        e.preventDefault();
-        renderHostPortalModal('list');
-      };
-    } else {
-      mobileNavBtn.textContent = '🔐 Admin Portal';
-      mobileNavBtn.href = 'login.html';
-      mobileNavBtn.onclick = null;
     }
   }
 }
